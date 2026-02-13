@@ -358,8 +358,11 @@ const HomePage: React.FC<HomePageProps> = ({ onProductClick, onNavigate, onToggl
       <div className="bg-black text-white py-40 mt-24 border-y-[16px] border-cocos-orange relative overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-cocos-orange/5 skew-x-12 translate-x-1/4"></div>
         <div className="max-w-[1600px] mx-auto px-4 text-center relative z-10">
-          <h2 className="text-[80px] md:text-[140px] font-black italic mb-10 uppercase tracking-tighter leading-none font-serif-promo">CLEARANCE<br /><span className="text-cocos-orange">40-70% OFF</span></h2>
-          <p className="text-[18px] md:text-[22px] font-black mb-20 uppercase tracking-[0.8em] text-gray-500">FINAL MARKDOWNS — GET IT BEFORE IT'S GONE</p>
+          <h2 className="text-[48px] sm:text-[60px] md:text-[140px] font-black italic mb-10 uppercase tracking-tighter leading-none font-serif-promo">
+            CLEARANCE<br />
+            <span className="text-cocos-orange">40-70% OFF</span>
+          </h2>
+          <p className="text-[13px] md:text-[22px] font-black mb-20 uppercase tracking-[0.4em] md:tracking-[0.8em] text-gray-500">FINAL MARKDOWNS — GET IT BEFORE IT'S GONE</p>
           <div className="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto">
             {clearanceCategories.map(cat => (
               <button
