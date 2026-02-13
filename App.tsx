@@ -12,12 +12,14 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import AuthPage from './pages/AuthPage';
 import DashboardPage from './pages/DashboardPage';
+import WishlistPage from './pages/WishlistPage';
 import { Product, CartItem, User } from './types';
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [wishlist, setWishlist] = useState<Product[]>([]);
   const [user, setUser] = useState<User | null>(null);
 
   // Scroll to top when page changes
@@ -45,6 +47,16 @@ const App: React.FC = () => {
       return [...prevCart, { ...product, quantity, selectedSize: size, selectedColor: color }];
     });
     setCurrentPage('cart');
+  };
+
+  const toggleWishlist = (product: Product) => {
+    setWishlist(prev => {
+      const exists = prev.find(p => p.id === product.id);
+      if (exists) {
+        return prev.filter(p => p.id !== product.id);
+      }
+      return [...prev, product];
+    });
   };
 
   const removeFromCart = (id: string, size?: string, color?: string) => {
@@ -78,15 +90,17 @@ const App: React.FC = () => {
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <HomePage onNavigate={setCurrentPage} onProductClick={handleProductClick} />;
+        return <HomePage onNavigate={setCurrentPage} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
       case 'women':
-        return <WomenPage onProductClick={handleProductClick} />;
+        return <WomenPage onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
       case 'men':
-        return <MenPage onProductClick={handleProductClick} />;
+        return <MenPage onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
       case 'shoes':
-        return <ShoesPage onProductClick={handleProductClick} />;
+        return <ShoesPage onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
       case 'handbags':
-        return <HandbagsPage onProductClick={handleProductClick} />;
+        return <HandbagsPage onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
+      case 'wishlist':
+        return <WishlistPage wishlist={wishlist} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onNavigate={setCurrentPage} />;
       case 'cart':
         return (
           <CartPage 
@@ -122,12 +136,14 @@ const App: React.FC = () => {
             product={selectedProduct} 
             onProductClick={handleProductClick} 
             onAddToBag={addToCart}
+            onToggleWishlist={toggleWishlist}
+            wishlist={wishlist}
           />
         ) : (
-          <HomePage onNavigate={setCurrentPage} onProductClick={handleProductClick} />
+          <HomePage onNavigate={setCurrentPage} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />
         );
       default:
-        return <HomePage onNavigate={setCurrentPage} onProductClick={handleProductClick} />;
+        return <HomePage onNavigate={setCurrentPage} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
     }
   };
 
@@ -137,6 +153,7 @@ const App: React.FC = () => {
         onNavigate={setCurrentPage} 
         currentPage={currentPage} 
         cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)} 
+        wishlistCount={wishlist.length}
         user={user}
       />
       

@@ -1,14 +1,16 @@
 
 import React, { useRef, useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Heart, Star } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Heart, Star, ShoppingBag, Eye } from 'lucide-react';
 import { Product } from '../types';
 
 interface Props {
   products: Product[];
   onProductClick?: (product: Product) => void;
+  onToggleWishlist?: (product: Product) => void;
+  wishlist?: Product[];
 }
 
-const ProductSlider: React.FC<Props> = ({ products, onProductClick }) => {
+const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWishlist, wishlist = [] }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
@@ -38,95 +40,142 @@ const ProductSlider: React.FC<Props> = ({ products, onProductClick }) => {
     }
   };
 
+  const isInWishlist = (productId: string) => wishlist.some(p => p.id === productId);
+
   return (
-    <div className="relative group">
+    <div className="relative group/slider px-2">
       <div 
         ref={scrollRef}
-        className="flex gap-[22px] overflow-x-auto hide-scrollbar snap-x pb-4"
+        className="flex gap-[32px] overflow-x-auto hide-scrollbar snap-x pb-12 pt-4"
       >
         {products.map((product) => (
           <div 
             key={product.id} 
-            className="min-w-[200px] md:min-w-[260px] snap-start bg-white cursor-pointer group/item"
+            className="min-w-[260px] md:min-w-[320px] snap-start bg-white cursor-pointer group/item flex flex-col"
             onClick={() => onProductClick?.(product)}
           >
-            <div className="relative aspect-square overflow-hidden bg-[#F9F9F9] mb-3">
-              <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-[1.03]" />
+            {/* Visual Container */}
+            <div className="relative aspect-[4/5] overflow-hidden bg-[#F8F8F8] rounded-none mb-6">
+              <img 
+                src={product.imageUrl} 
+                alt={product.name} 
+                className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/item:scale-110" 
+              />
               
-              {/* Heart Icon Button */}
-              <button 
-                className="absolute top-2.5 right-2.5 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-gray-50 transition-colors z-10"
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-              >
-                <Heart size={16} className="text-black" />
-              </button>
+              {/* Interaction Overlay */}
+              <div className="absolute inset-0 bg-black/5 opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
 
+              {/* Action Buttons */}
+              <div className="absolute top-5 right-5 flex flex-col gap-3 translate-x-12 opacity-0 group-hover/item:translate-x-0 group-hover/item:opacity-100 transition-all duration-500">
+                <button 
+                  className={`w-11 h-11 bg-white rounded-full flex items-center justify-center shadow-2xl transition-all transform hover:scale-110 ${isInWishlist(product.id) ? 'text-cocos-orange' : 'text-black hover:text-cocos-orange'}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleWishlist?.(product);
+                  }}
+                >
+                  <Heart size={20} fill={isInWishlist(product.id) ? "currentColor" : "none"} />
+                </button>
+                <button 
+                  className="w-11 h-11 bg-white rounded-full flex items-center justify-center shadow-2xl hover:bg-cocos-orange hover:text-white transition-all transform hover:scale-110"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onProductClick?.(product);
+                  }}
+                >
+                  <Eye size={20} className="text-black group-hover:text-inherit" />
+                </button>
+              </div>
+
+              {/* Status Badge */}
               {product.badge && (
-                <div className="absolute bottom-0 left-0 bg-cocos-orange text-white text-[9px] font-bold px-2 py-0.5 uppercase">
+                <div className="absolute top-5 left-0 bg-cocos-orange text-white text-[10px] font-black px-4 py-2 uppercase tracking-[0.2em] shadow-lg">
                   {product.badge}
                 </div>
               )}
+
+              {/* Quick Add Bar */}
+              <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover/item:translate-y-0 transition-transform duration-300 bg-black p-4 flex justify-center">
+                 <button className="flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-[0.3em] hover:text-cocos-orange transition-colors">
+                   <ShoppingBag size={14} /> Quick Add
+                 </button>
+              </div>
             </div>
             
-            <div className="px-0.5">
-              <p className="text-[13px] font-bold mb-0.5 tracking-tight">{product.brand}</p>
-              <h3 className="text-[14px] text-black font-medium line-clamp-2 mb-1.5 h-10 leading-snug">{product.name}</h3>
+            {/* Typography & Details */}
+            <div className="flex flex-col flex-grow px-1">
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-[11px] font-black uppercase tracking-[0.3em] text-gray-400">{product.brand}</span>
+                <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded-sm">
+                   <Star size={12} fill="#FF7D00" className="text-cocos-orange" />
+                   <span className="text-[11px] font-black">{product.rating}</span>
+                </div>
+              </div>
+
+              <h3 className="font-serif-promo text-[18px] md:text-[22px] text-black font-medium leading-[1.2] mb-4 line-clamp-1 group-hover/item:text-cocos-orange transition-colors">
+                {product.name}
+              </h3>
               
-              <div className="flex items-baseline gap-1.5 mb-1 mt-2">
-                <span className="text-cocos-orange font-bold text-[15px]">{product.price}</span>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-cocos-orange font-black text-[22px] tracking-tighter">{product.price}</span>
                 {product.discount && (
-                  <span className="text-cocos-orange text-[12px] font-normal">{product.discount}</span>
+                  <span className="text-gray-400 text-[14px] line-through font-medium">{product.originalPrice}</span>
+                )}
+                {product.discount && (
+                  <span className="text-cocos-orange text-[12px] font-black uppercase tracking-widest">{product.discount}</span>
                 )}
               </div>
 
-              <p className="text-[12px] text-[#0046BE] font-medium mb-2 leading-none">$10 Star Rewards for $100</p>
+              {/* Star Rewards Interactive Bar */}
+              <div className="mt-auto border-t border-gray-100 pt-5 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                   <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></div>
+                   <p className="text-[11px] font-bold text-[#0046BE] uppercase tracking-wider">
+                     UGX 40,000 Rewards
+                   </p>
+                </div>
+                <span className="text-[11px] text-gray-400 font-bold">({product.reviews})</span>
+              </div>
               
-              {/* Color Swatches */}
+              {/* Color Swatches Grid */}
               {product.colors && product.colors.length > 0 && (
-                <div className="flex items-center gap-1.5 mt-2 mb-3">
-                  {product.colors.map((color, idx) => (
+                <div className="flex items-center gap-2.5 mt-5">
+                  {product.colors.slice(0, 5).map((color, idx) => (
                     <div 
                       key={idx} 
-                      className={`w-7 h-7 rounded-full p-[1px] flex items-center justify-center ${idx === 0 ? 'border border-black' : 'border border-transparent'}`}
+                      className={`w-6 h-6 rounded-full p-[2px] transition-all ring-offset-2 ${idx === 0 ? 'ring-2 ring-black' : 'hover:ring-1 hover:ring-gray-300'}`}
                     >
                       <div 
-                        className="w-full h-full rounded-full border border-gray-300" 
+                        className="w-full h-full rounded-full border border-gray-100 shadow-inner" 
                         style={{ backgroundColor: color }}
                       />
                     </div>
                   ))}
+                  {product.colors.length > 5 && (
+                    <span className="text-[10px] font-black text-gray-400 ml-1">+{product.colors.length - 5}</span>
+                  )}
                 </div>
               )}
-
-              <div className="flex items-center gap-1 mt-1">
-                <div className="flex text-cocos-orange">
-                   {[...Array(5)].map((_, i) => (
-                     <Star key={i} size={11} fill={i < Math.floor(product.rating) ? "currentColor" : "none"} />
-                   ))}
-                </div>
-                <span className="text-[10px] text-gray-400 font-bold">({product.reviews})</span>
-              </div>
             </div>
           </div>
         ))}
       </div>
 
+      {/* Modern Slider Navigation */}
       {showLeft && (
         <button 
           onClick={() => scroll('left')}
-          className="absolute -left-6 top-[35%] -translate-y-1/2 bg-white w-12 h-12 rounded-full shadow-lg border border-gray-100 flex items-center justify-center z-20 hover:bg-gray-50 transition-all"
+          className="absolute -left-8 top-[38%] -translate-y-1/2 bg-white w-16 h-16 rounded-full shadow-2xl border border-gray-100 flex items-center justify-center z-20 hover:scale-110 hover:bg-cocos-orange hover:text-white transition-all duration-500 group/nav"
         >
-          <ChevronLeft size={24} className="text-black" />
+          <ChevronLeft size={32} className="transition-transform group-hover/nav:-translate-x-1" />
         </button>
       )}
       {showRight && (
         <button 
           onClick={() => scroll('right')}
-          className="absolute -right-6 top-[35%] -translate-y-1/2 bg-white w-12 h-12 rounded-full shadow-lg border border-gray-100 flex items-center justify-center z-20 hover:bg-gray-50 transition-all"
+          className="absolute -right-8 top-[38%] -translate-y-1/2 bg-white w-16 h-16 rounded-full shadow-2xl border border-gray-100 flex items-center justify-center z-20 hover:scale-110 hover:bg-cocos-orange hover:text-white transition-all duration-500 group/nav"
         >
-          <ChevronRight size={24} className="text-black" />
+          <ChevronRight size={32} className="transition-transform group-hover/nav:translate-x-1" />
         </button>
       )}
     </div>

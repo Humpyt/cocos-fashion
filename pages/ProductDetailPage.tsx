@@ -8,9 +8,11 @@ interface Props {
   product: Product;
   onProductClick: (product: Product) => void;
   onAddToBag?: (product: Product, quantity: number, size?: string, color?: string) => void;
+  onToggleWishlist?: (product: Product) => void;
+  wishlist?: Product[];
 }
 
-const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBag }) => {
+const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBag, onToggleWishlist, wishlist = [] }) => {
   const [selectedColor, setSelectedColor] = useState(product.colors?.[0] || '');
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -24,11 +26,13 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
     "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=400"
   ];
 
+  const isInWishlist = wishlist.some(p => p.id === product.id);
+
   const recommendations: Product[] = Array(6).fill(null).map((_, i) => ({
     id: `rec-${i}`,
     brand: product.brand,
     name: `Similar ${product.brand} Item ${i + 1}`,
-    price: "$89.99",
+    price: "UGX 120,000",
     discount: "(25% off)",
     rating: 4.5,
     reviews: 120,
@@ -74,8 +78,11 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
           {/* Main Image */}
           <div className="flex-grow relative aspect-[4/5] bg-gray-50 group overflow-hidden">
             <img src={mainImage} alt={product.name} className="w-full h-full object-cover" />
-            <button className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:text-cocos-orange transition-all">
-              <Heart size={20} />
+            <button 
+              className={`absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg transition-all ${isInWishlist ? 'text-cocos-orange' : 'hover:text-cocos-orange'}`}
+              onClick={() => onToggleWishlist?.(product)}
+            >
+              <Heart size={20} fill={isInWishlist ? "currentColor" : "none"} />
             </button>
           </div>
         </div>
@@ -108,7 +115,7 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
                   <span className="text-[16px] text-cocos-orange font-bold">{product.discount}</span>
                 )}
              </div>
-             <p className="text-[12px] font-bold text-gray-500 mt-1 uppercase tracking-wider">Flash Sale ends 2/28</p>
+             <p className="text-[12px] font-bold text-gray-500 mt-1 uppercase tracking-wider">Sale ends soon</p>
           </div>
 
           {/* Rewards Offer */}
@@ -116,8 +123,8 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
             <div className="flex gap-3">
               <div className="text-cocos-orange font-bold text-xl">★</div>
               <div>
-                <p className="text-[13px] font-bold text-black mb-0.5">Get $10 Coco's Credit for $100</p>
-                <p className="text-[11px] text-gray-700">spent with your Coco's Style Card. Earn points twice as fast!</p>
+                <p className="text-[13px] font-bold text-black mb-0.5">Get UGX 40,000 Credit for UGX 300,000</p>
+                <p className="text-[11px] text-gray-700">spent with your Coco's Style Card. Earn points twice as fast in Uganda!</p>
                 <button className="text-[11px] font-bold underline mt-1.5 text-cocos-orange uppercase tracking-wider">Details</button>
               </div>
             </div>
@@ -126,7 +133,7 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
           {/* Colors */}
           {product.colors && product.colors.length > 0 && (
             <div className="mb-8">
-              <p className="text-[13px] font-bold uppercase mb-3 tracking-widest">Color: <span className="text-gray-500 ml-1 font-normal">Premium Selection</span></p>
+              <p className="text-[13px] font-bold uppercase mb-3 tracking-widest">Color: <span className="text-gray-500 ml-1 font-normal">Selection</span></p>
               <div className="flex flex-wrap gap-2.5">
                 {product.colors.map((color, idx) => (
                   <button 
@@ -185,14 +192,14 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
               <div className="pt-1"><Truck size={20} className="text-cocos-orange" /></div>
               <div>
                 <p className="text-[13px] font-black uppercase tracking-tight mb-0.5">Premium Free Shipping</p>
-                <p className="text-[12px] text-gray-500">Arrives in 2-3 business days. Free for rewards members.</p>
+                <p className="text-[12px] text-gray-500">Delivery within 2-3 business days across Uganda.</p>
               </div>
             </div>
             <div className="flex gap-4">
               <div className="pt-1"><Store size={20} className="text-cocos-orange" /></div>
               <div>
                 <p className="text-[13px] font-black uppercase tracking-tight mb-0.5">Quick Pickup</p>
-                <p className="text-[12px] text-gray-500">Ready in 2 hours at your local Coco's Boutique.</p>
+                <p className="text-[12px] text-gray-500">Ready in 2 hours at our Kampala Boutique.</p>
                 <button className="text-[11px] font-bold underline mt-1 text-cocos-orange uppercase tracking-wider">Change Store</button>
               </div>
             </div>
