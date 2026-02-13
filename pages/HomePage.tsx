@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import HeroSlider from '../components/HeroSlider';
 import PresidentsDayHeader from '../components/PresidentsDayHeader';
-import FurniturePromo from '../components/FurniturePromo';
 import DealCardGrid from '../components/DealCardGrid';
 import ProductSlider from '../components/ProductSlider';
 import { Product, Category } from '../types';
@@ -233,9 +232,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, onProductClick, onToggl
         <ProductSlider products={giftProducts} onProductClick={onProductClick} onToggleWishlist={onToggleWishlist} wishlist={wishlist} />
       </section>
 
-      <FurniturePromo />
-
-      {/* Creative Campaign Section */}
+      {/* Creative Campaign Section - THE DENIM EVENT */}
       <section className="max-w-[1400px] mx-auto px-4 py-24">
           <div className="relative h-[720px] bg-stone-100 overflow-hidden group shadow-2xl">
                <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=1800" className="w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110" alt="The Denim Event" />
@@ -243,11 +240,22 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, onProductClick, onToggl
                   <div className="max-w-4xl px-8 transform transition-all duration-1000 group-hover:translate-y-[-20px]">
                     <span className="text-[14px] font-black tracking-[0.6em] uppercase text-cocos-orange mb-8 block">Spring Campaign '25</span>
                     <h2 className="text-[80px] md:text-[130px] font-black italic tracking-tighter mb-6 uppercase leading-[0.75] font-serif-promo">THE DENIM<br/><span className="text-cocos-orange">EVENT</span></h2>
-                    <p className="text-2xl md:text-3xl font-bold mb-14 tracking-wide uppercase opacity-90">30-40% OFF. Shop the latest fits, washes & trends.</p>
-                    <div className="flex gap-8 justify-center">
-                        <button onClick={() => onNavigate?.('women')} className="bg-white text-black px-16 py-5 font-black uppercase text-xs tracking-[0.3em] hover:bg-cocos-orange hover:text-white transition-all shadow-2xl">Women</button>
-                        <button onClick={() => onNavigate?.('men')} className="bg-white text-black px-16 py-5 font-black uppercase text-xs tracking-[0.3em] hover:bg-cocos-orange hover:text-white transition-all shadow-2xl">Men</button>
+                    <p className="text-2xl md:text-3xl font-bold mb-14 tracking-wide uppercase opacity-90">30-40% OFF. SHOP THE LATEST FITS, WASHES & TRENDS.</p>
+                    <div className="flex flex-wrap gap-6 md:gap-8 justify-center">
+                        <button onClick={() => onNavigate?.('women')} className="bg-white text-black px-12 md:px-16 py-4 md:py-5 font-black uppercase text-xs tracking-[0.3em] hover:bg-cocos-orange hover:text-white transition-all shadow-2xl">Women</button>
+                        <button onClick={() => onNavigate?.('men')} className="bg-white text-black px-12 md:px-16 py-4 md:py-5 font-black uppercase text-xs tracking-[0.3em] hover:bg-cocos-orange hover:text-white transition-all shadow-2xl">Men</button>
+                        <button onClick={() => onNavigate?.('shoes')} className="bg-white text-black px-12 md:px-16 py-4 md:py-5 font-black uppercase text-xs tracking-[0.3em] hover:bg-cocos-orange hover:text-white transition-all shadow-2xl">Shoes</button>
                     </div>
+                  </div>
+               </div>
+
+               {/* Requested Left Menu Integration per Screenshot Annotations */}
+               <div className="absolute left-12 bottom-12 hidden md:block border-l-4 border-cocos-orange pl-8">
+                  <div className="flex flex-col gap-3 text-[12px] font-black uppercase tracking-[0.2em] text-white">
+                    <button onClick={() => onNavigate?.('women')} className="text-left hover:text-cocos-orange underline decoration-cocos-orange underline-offset-4">Women</button>
+                    <button onClick={() => onNavigate?.('men')} className="text-left hover:text-cocos-orange underline decoration-cocos-orange underline-offset-4">Men</button>
+                    <button onClick={() => onNavigate?.('shoes')} className="text-left hover:text-cocos-orange underline decoration-cocos-orange underline-offset-4">Shoes</button>
+                    <button onClick={() => onNavigate?.('home')} className="text-left hover:text-cocos-orange">Shop All Denim</button>
                   </div>
                </div>
           </div>

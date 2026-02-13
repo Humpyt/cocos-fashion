@@ -14,7 +14,7 @@ const slides = [
     ctaSecondary: "Shop Men",
     productBadge: {
       name: "SILKY SATIN SLIP DRESS",
-      price: "$89.00",
+      price: "UGX 330,000",
       tag: "NEW ARRIVAL"
     }
   },
@@ -29,7 +29,7 @@ const slides = [
     ctaSecondary: "View Lookbook",
     productBadge: {
       name: "VINTAGE HIGH RISE STRAIGHT",
-      price: "$54.00",
+      price: "UGX 200,000",
       tag: "BEST SELLER"
     }
   },
@@ -44,7 +44,7 @@ const slides = [
     ctaSecondary: "Shop Handbags",
     productBadge: {
       name: "PEBBLED LEATHER TOTE",
-      price: "$195.00",
+      price: "UGX 720,000",
       tag: "EDITOR'S CHOICE"
     }
   }

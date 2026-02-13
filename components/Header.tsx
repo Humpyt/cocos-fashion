@@ -19,17 +19,10 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, cartCount = 0,
         <div className="flex gap-4">
           <a href="#" className="hover:underline">COCO'S UGANDA DEALS</a>
           <a href="#" className="hover:underline">Fashion Week deals</a>
-          <a href="#" className="hover:underline">Jewelry sale</a>
-          <a href="#" className="hover:underline">Seasonal essentials</a>
-          <a href="#" className="hover:underline">Home collection</a>
           <a href="#" className="text-cocos-orange hover:underline">See All ></a>
         </div>
         <div className="flex gap-6 items-center">
-          <a href="#" className="hover:underline flex items-center gap-1.5"><MapPin size={13} /> Kampala Store</a>
-          <a href="#" className="hover:underline flex items-center gap-1.5"><Gift size={13} /> Gift Registry</a>
-          <button onClick={() => onNavigate('cart')} className="hover:underline flex items-center gap-1.5 uppercase">
-            <ShoppingBag size={13} /> {cartCount}
-          </button>
+          {/* Top bar bag icon removed per screenshot request */}
         </div>
       </div>
 
