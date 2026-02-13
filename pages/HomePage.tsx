@@ -164,11 +164,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, onProductClick, onToggl
     { label: 'Women', route: 'women' },
     { label: 'Men', route: 'men' },
     { label: 'Shoes', route: 'shoes' },
-    { label: 'Handbags', route: 'handbags' },
-    { label: 'Gifts', route: 'gifts' },
-    { label: 'Now & Trending', route: 'now' },
-    { label: 'Sale', route: 'sale' },
-    { label: 'Shop All', route: 'home' }
+    { label: 'Handbags', route: 'handbags' }
   ];
 
   return (
@@ -234,17 +230,16 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, onProductClick, onToggl
 
       {/* Creative Campaign Section - THE DENIM EVENT */}
       <section className="max-w-[1400px] mx-auto px-4 py-24">
-          <div className="relative h-[720px] bg-stone-100 overflow-hidden group shadow-2xl">
+          <div className="relative h-[500px] bg-stone-100 overflow-hidden group shadow-2xl">
                <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&q=80&w=1800" className="w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110" alt="The Denim Event" />
                <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center bg-black/40 backdrop-blur-[2px]">
                   <div className="max-w-4xl px-8 transform transition-all duration-1000 group-hover:translate-y-[-20px]">
-                    <span className="text-[14px] font-black tracking-[0.6em] uppercase text-cocos-orange mb-8 block">Spring Campaign '25</span>
-                    <h2 className="text-[80px] md:text-[130px] font-black italic tracking-tighter mb-6 uppercase leading-[0.75] font-serif-promo">THE DENIM<br/><span className="text-cocos-orange">EVENT</span></h2>
-                    <p className="text-2xl md:text-3xl font-bold mb-14 tracking-wide uppercase opacity-90">30-40% OFF. SHOP THE LATEST FITS, WASHES & TRENDS.</p>
+                    <span className="text-[14px] font-black tracking-[0.6em] uppercase text-cocos-orange mb-4 block">Spring Campaign '25</span>
+                    <h2 className="text-[60px] md:text-[80px] font-black italic tracking-tighter mb-4 uppercase leading-[0.75] font-serif-promo">THE DENIM<br/><span className="text-cocos-orange">EVENT</span></h2>
+                    <p className="text-xl md:text-2xl font-bold mb-10 tracking-wide uppercase opacity-90">30-40% OFF. SHOP THE LATEST FITS, WASHES & TRENDS.</p>
                     <div className="flex flex-wrap gap-6 md:gap-8 justify-center">
-                        <button onClick={() => onNavigate?.('women')} className="bg-white text-black px-12 md:px-16 py-4 md:py-5 font-black uppercase text-xs tracking-[0.3em] hover:bg-cocos-orange hover:text-white transition-all shadow-2xl">Women</button>
-                        <button onClick={() => onNavigate?.('men')} className="bg-white text-black px-12 md:px-16 py-4 md:py-5 font-black uppercase text-xs tracking-[0.3em] hover:bg-cocos-orange hover:text-white transition-all shadow-2xl">Men</button>
-                        <button onClick={() => onNavigate?.('shoes')} className="bg-white text-black px-12 md:px-16 py-4 md:py-5 font-black uppercase text-xs tracking-[0.3em] hover:bg-cocos-orange hover:text-white transition-all shadow-2xl">Shoes</button>
+                        <button onClick={() => onNavigate?.('women')} className="bg-black text-white px-12 md:px-16 py-4 md:py-5 font-black uppercase text-xs tracking-[0.3em] hover:bg-cocos-orange hover:text-black transition-all shadow-2xl">Shop Denim</button>
+                        <button onClick={() => onNavigate?.('men')} className="bg-white text-black px-12 md:px-16 py-4 md:py-5 font-black uppercase text-xs tracking-[0.3em] hover:bg-cocos-orange hover:text-white transition-all shadow-2xl">View Lookbook</button>
                     </div>
                   </div>
                </div>

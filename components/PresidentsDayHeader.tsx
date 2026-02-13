@@ -4,29 +4,29 @@ import { ChevronDown } from 'lucide-react';
 
 const PresidentsDayHeader: React.FC = () => {
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-4 mt-6">
-      <section className="bg-[#F5F2E8] py-8 px-8 md:px-12 border-b border-gray-200/50">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+    <div className="w-full max-w-[1400px] mx-auto px-4 mt-4 md:mt-6">
+      <section className="bg-[#F5F2E8] py-3 md:py-5 px-6 md:px-10 border-b border-gray-200/50 rounded-sm shadow-sm transition-all hover:shadow-md">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-4 md:gap-8">
           {/* Left: Title and Subtext */}
-          <div className="flex flex-col">
-            <h2 className="font-serif-promo text-[48px] md:text-[64px] font-bold leading-[1.1] tracking-tight">
+          <div className="flex flex-col text-center lg:text-left">
+            <h2 className="font-serif-promo text-[24px] md:text-[42px] font-bold leading-tight tracking-tight text-black">
               Presidents’ Day Sale
             </h2>
-            <p className="text-[13px] font-bold mt-2 text-[#000]">
-              Long weekend ahead—save now on denim, activewear, home & more, 20-60% off.
+            <p className="text-[10px] md:text-[12px] font-bold mt-1 text-gray-700 max-w-sm mx-auto lg:mx-0">
+              Long weekend ahead—save now on denim, activewear, home & more.
             </p>
           </div>
 
           {/* Right: Discount and Button */}
-          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-16">
-            <div className="font-serif-promo text-[48px] md:text-[64px] font-bold leading-none whitespace-nowrap">
+          <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-12 w-full lg:w-auto">
+            <div className="font-serif-promo text-[28px] md:text-[48px] font-black leading-none whitespace-nowrap text-cocos-orange lg:text-black">
               Up to 60% OFF
             </div>
             
-            <div className="relative">
-              <button className="bg-white border border-gray-100 shadow-sm px-6 py-3.5 rounded-md flex items-center justify-between gap-12 text-sm font-bold min-w-[200px] hover:shadow-md transition-shadow">
+            <div className="w-full sm:w-auto">
+              <button className="bg-white border border-gray-200 shadow-sm px-5 py-2.5 rounded-sm flex items-center justify-between gap-6 text-[10px] md:text-xs font-black w-full sm:min-w-[180px] hover:bg-gray-50 transition-all uppercase tracking-widest">
                 <span>Shop by category</span>
-                <ChevronDown size={18} />
+                <ChevronDown size={14} />
               </button>
             </div>
           </div>
