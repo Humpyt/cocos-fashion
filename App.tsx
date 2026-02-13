@@ -14,6 +14,7 @@ import AuthPage from './pages/AuthPage';
 import DashboardPage from './pages/DashboardPage';
 import WishlistPage from './pages/WishlistPage';
 import QuickViewModal from './components/QuickViewModal';
+import WhatsAppButton from './components/WhatsAppButton';
 import { Product, CartItem, User } from './types';
 
 const App: React.FC = () => {
@@ -175,6 +176,9 @@ const App: React.FC = () => {
         onToggleWishlist={toggleWishlist}
         wishlist={wishlist}
       />
+
+      {/* Floating WhatsApp for Mobile/Global */}
+      <WhatsAppButton />
     </div>
   );
 };
