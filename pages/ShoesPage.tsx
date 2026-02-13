@@ -4,33 +4,41 @@ import { Category, Product } from '../types';
 import DealCardGrid from '../components/DealCardGrid';
 import ProductSlider from '../components/ProductSlider';
 import CategoryRoundGrid from '../components/CategoryRoundGrid';
+import { getImageByIndex } from '../imageStore';
 
-const ShoesPage: React.FC = () => {
+interface Props {
+  onProductClick?: (product: Product) => void;
+  onToggleWishlist?: (product: Product) => void;
+  onQuickView?: (product: Product) => void;
+  wishlist?: Product[];
+}
+
+const ShoesPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQuickView, wishlist = [] }) => {
   const categories: Category[] = [
-    { id: 's1', name: 'Boots', imageUrl: 'https://images.unsplash.com/photo-1605733513597-a8f8d410fe3c?auto=format&fit=crop&q=80&w=400' },
-    { id: 's2', name: 'Sneakers', imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c274d?auto=format&fit=crop&q=80&w=400' },
-    { id: 's3', name: 'Heels', imageUrl: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&q=80&w=400' },
-    { id: 's4', name: 'Sandals', imageUrl: 'https://images.unsplash.com/photo-1621233819170-87b09966d73f?auto=format&fit=crop&q=80&w=400' },
-    { id: 's5', name: 'Athletic', imageUrl: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&q=80&w=400' },
-    { id: 's6', name: 'Loafers', imageUrl: 'https://images.unsplash.com/photo-1533867617858-e7b97e060509?auto=format&fit=crop&q=80&w=400' },
+    { id: 's1', name: 'Boots', imageUrl: getImageByIndex(51) },
+    { id: 's2', name: 'Sneakers', imageUrl: getImageByIndex(52) },
+    { id: 's3', name: 'Heels', imageUrl: getImageByIndex(53) },
+    { id: 's4', name: 'Sandals', imageUrl: getImageByIndex(54) },
+    { id: 's5', name: 'Athletic', imageUrl: getImageByIndex(55) },
+    { id: 's6', name: 'Loafers', imageUrl: getImageByIndex(56) },
   ];
 
   const deals: Category[] = [
-    { id: 'sd1', name: 'ATHLETIC', label: '25-40% OFF', subtext: 'Nike, Adidas & more top brands.', imageUrl: 'https://images.unsplash.com/photo-1562183241-b937e95585b6?auto=format&fit=crop&q=80&w=600' },
-    { id: 'sd2', name: 'BOOTS', label: '40-60% OFF', subtext: 'Clearance on winter styles.', imageUrl: 'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&q=80&w=600' },
-    { id: 'sd3', name: 'LUXURY', label: '20% OFF', subtext: 'Designer shoes that shine.', imageUrl: 'https://images.unsplash.com/photo-1595341888016-a392ef81b7de?auto=format&fit=crop&q=80&w=600' },
+    { id: 'sd1', name: 'ATHLETIC', label: '25-40% OFF', subtext: 'Nike, Adidas & more top brands.', imageUrl: getImageByIndex(57) },
+    { id: 'sd2', name: 'BOOTS', label: '40-60% OFF', subtext: 'Clearance on winter styles.', imageUrl: getImageByIndex(58) },
+    { id: 'sd3', name: 'LUXURY', label: '20% OFF', subtext: 'Designer shoes that shine.', imageUrl: getImageByIndex(59) },
   ];
 
   const products: Product[] = Array(6).fill(null).map((_, i) => ({
     id: `s-prod-${i}`,
     brand: "Steve Madden",
     name: "Women's Viable Pointed-Toe Booties",
-    price: "$59.99",
-    originalPrice: "$99.00",
+    price: "UGX 320,000",
+    originalPrice: "UGX 450,000",
     discount: "(39% off)",
     rating: 4.5,
     reviews: 512,
-    imageUrl: `https://images.unsplash.com/photo-1542291026-7eec264c274d?auto=format&fit=crop&q=80&w=400&h=500&seed=shoes-${i}`,
+    imageUrl: getImageByIndex(i + 41),
     badge: "Limited Time"
   }));
 
@@ -38,10 +46,10 @@ const ShoesPage: React.FC = () => {
     <div className="w-full">
       {/* Hero */}
       <div className="relative h-[400px] bg-stone-100 flex items-center justify-center overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&q=80&w=1800" 
-          className="absolute inset-0 w-full h-full object-cover opacity-80" 
-          alt="Shoes Collection" 
+        <img
+          src={getImageByIndex(67)}
+          className="absolute inset-0 w-full h-full object-cover opacity-80"
+          alt="Shoes Collection"
         />
         <div className="relative z-10 text-center text-white drop-shadow-xl">
           <h2 className="text-6xl font-black italic uppercase tracking-tighter mb-4">Step Into Style</h2>
@@ -50,7 +58,7 @@ const ShoesPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-4 py-16">
+      <div className="max-w-[1600px] mx-auto px-4 py-16">
         <h2 className="text-[28px] font-black tracking-tight mb-8">Shop by Style</h2>
         <CategoryRoundGrid categories={categories} />
 
@@ -61,7 +69,13 @@ const ShoesPage: React.FC = () => {
 
         <div className="mt-20">
           <h2 className="text-[24px] font-bold mb-8">Bestsellers</h2>
-          <ProductSlider products={products} />
+          <ProductSlider
+            products={products}
+            onProductClick={onProductClick}
+            onToggleWishlist={onToggleWishlist}
+            onQuickView={onQuickView}
+            wishlist={wishlist}
+          />
         </div>
       </div>
     </div>

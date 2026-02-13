@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react';
 
 const PresidentsDayHeader: React.FC = () => {
   return (
-    <div className="w-full max-w-[1400px] mx-auto px-4 mt-4 md:mt-6">
+    <div className="w-full max-w-[1600px] mx-auto px-4 mt-4 md:mt-6">
       <section className="bg-[#F5F2E8] py-3 md:py-5 px-6 md:px-10 border-b border-gray-200/50 rounded-sm shadow-sm transition-all hover:shadow-md">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-4 md:gap-8">
           {/* Left: Title and Subtext */}

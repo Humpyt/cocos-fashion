@@ -13,6 +13,7 @@ import CheckoutPage from './pages/CheckoutPage';
 import AuthPage from './pages/AuthPage';
 import DashboardPage from './pages/DashboardPage';
 import WishlistPage from './pages/WishlistPage';
+import QuickViewModal from './components/QuickViewModal';
 import { Product, CartItem, User } from './types';
 
 const App: React.FC = () => {
@@ -21,6 +22,7 @@ const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<Product[]>([]);
   const [user, setUser] = useState<User | null>(null);
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
   // Scroll to top when page changes
   useEffect(() => {
@@ -60,13 +62,13 @@ const App: React.FC = () => {
   };
 
   const removeFromCart = (id: string, size?: string, color?: string) => {
-    setCart(prevCart => prevCart.filter(item => 
+    setCart(prevCart => prevCart.filter(item =>
       !(item.id === id && item.selectedSize === size && item.selectedColor === color)
     ));
   };
 
   const updateQuantity = (id: string, quantity: number, size?: string, color?: string) => {
-    setCart(prevCart => prevCart.map(item => 
+    setCart(prevCart => prevCart.map(item =>
       (item.id === id && item.selectedSize === size && item.selectedColor === color)
         ? { ...item, quantity }
         : item
@@ -90,30 +92,31 @@ const App: React.FC = () => {
   const renderPage = () => {
     switch (currentPage) {
       case 'home':
-        return <HomePage onNavigate={setCurrentPage} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
-      case 'women':
-        return <WomenPage onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
-      case 'men':
-        return <MenPage onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
-      case 'shoes':
-        return <ShoesPage onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
-      case 'handbags':
-        return <HandbagsPage onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
-      case 'wishlist':
-        return <WishlistPage wishlist={wishlist} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onNavigate={setCurrentPage} />;
-      case 'cart':
         return (
-          <CartPage 
-            cart={cart} 
-            onRemove={removeFromCart} 
-            onUpdateQuantity={updateQuantity}
-            onProductClick={handleProductClick}
+          <HomePage
             onNavigate={setCurrentPage}
+            onProductClick={handleProductClick}
+            onToggleWishlist={toggleWishlist}
+            onAddToBag={addToCart}
+            onQuickView={setQuickViewProduct}
+            wishlist={wishlist}
           />
         );
+      case 'women':
+        return <WomenPage onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onQuickView={setQuickViewProduct} wishlist={wishlist} />;
+      case 'men':
+        return <MenPage onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onQuickView={setQuickViewProduct} wishlist={wishlist} />;
+      case 'shoes':
+        return <ShoesPage onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onQuickView={setQuickViewProduct} wishlist={wishlist} />;
+      case 'handbags':
+        return <HandbagsPage onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onQuickView={setQuickViewProduct} wishlist={wishlist} />;
+      case 'wishlist':
+        return <WishlistPage wishlist={wishlist} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onNavigate={setCurrentPage} onQuickView={setQuickViewProduct} />;
+      case 'cart':
+        return <CartPage cart={cart} onRemoveItem={removeFromCart} onUpdateQuantity={updateQuantity} onProductClick={handleProductClick} onNavigate={setCurrentPage} onQuickView={setQuickViewProduct} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
       case 'checkout':
         return (
-          <CheckoutPage 
+          <CheckoutPage
             cart={cart}
             onNavigate={setCurrentPage}
             onOrderComplete={() => {
@@ -126,15 +129,15 @@ const App: React.FC = () => {
         return <AuthPage onSignIn={handleSignIn} onNavigate={setCurrentPage} />;
       case 'dashboard':
         return user ? (
-          <DashboardPage user={user} onSignOut={handleSignOut} onNavigate={setCurrentPage} />
+          <DashboardPage user={user} onSignOut={handleSignOut} onNavigate={setCurrentPage} onQuickView={setQuickViewProduct} />
         ) : (
           <AuthPage onSignIn={handleSignIn} onNavigate={setCurrentPage} />
         );
       case 'productDetail':
         return selectedProduct ? (
-          <ProductDetailPage 
-            product={selectedProduct} 
-            onProductClick={handleProductClick} 
+          <ProductDetailPage
+            product={selectedProduct}
+            onProductClick={handleProductClick}
             onAddToBag={addToCart}
             onToggleWishlist={toggleWishlist}
             wishlist={wishlist}
@@ -149,19 +152,29 @@ const App: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header 
-        onNavigate={setCurrentPage} 
-        currentPage={currentPage} 
-        cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)} 
+      <Header
+        onNavigate={setCurrentPage}
+        currentPage={currentPage}
+        cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
         wishlistCount={wishlist.length}
         user={user}
       />
-      
+
       <main className="flex-grow">
         {renderPage()}
       </main>
 
       <Footer />
+
+      {/* Global Quick View Modal */}
+      <QuickViewModal
+        product={quickViewProduct}
+        isOpen={!!quickViewProduct}
+        onClose={() => setQuickViewProduct(null)}
+        onAddToBag={addToCart}
+        onToggleWishlist={toggleWishlist}
+        wishlist={wishlist}
+      />
     </div>
   );
 };

@@ -4,33 +4,41 @@ import { Category, Product } from '../types';
 import DealCardGrid from '../components/DealCardGrid';
 import ProductSlider from '../components/ProductSlider';
 import CategoryRoundGrid from '../components/CategoryRoundGrid';
+import { getImageByIndex } from '../imageStore';
 
-const HandbagsPage: React.FC = () => {
+interface Props {
+  onProductClick?: (product: Product) => void;
+  onToggleWishlist?: (product: Product) => void;
+  onQuickView?: (product: Product) => void;
+  wishlist?: Product[];
+}
+
+const HandbagsPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQuickView, wishlist = [] }) => {
   const categories: Category[] = [
-    { id: 'h1', name: 'Totes', imageUrl: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&q=80&w=400' },
-    { id: 'h2', name: 'Crossbody', imageUrl: 'https://images.unsplash.com/photo-1591375275653-0660a4ff2467?auto=format&fit=crop&q=80&w=400' },
-    { id: 'h3', name: 'Shoulder Bags', imageUrl: 'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&q=80&w=400' },
-    { id: 'h4', name: 'Satchels', imageUrl: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&q=80&w=400' },
-    { id: 'h5', name: 'Backpacks', imageUrl: 'https://images.unsplash.com/photo-1547949003-9792a18a2601?auto=format&fit=crop&q=80&w=400' },
-    { id: 'h6', name: 'Clutches', imageUrl: 'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?auto=format&fit=crop&q=80&w=400' },
+    { id: 'h1', name: 'Totes', imageUrl: getImageByIndex(61) },
+    { id: 'h2', name: 'Crossbody', imageUrl: getImageByIndex(62) },
+    { id: 'h3', name: 'Shoulder Bags', imageUrl: getImageByIndex(63) },
+    { id: 'h4', name: 'Satchels', imageUrl: getImageByIndex(64) },
+    { id: 'h5', name: 'Backpacks', imageUrl: getImageByIndex(65) },
+    { id: 'h6', name: 'Clutches', imageUrl: getImageByIndex(66) },
   ];
 
   const deals: Category[] = [
-    { id: 'hd1', name: 'DESIGNER', label: 'STARTING AT $129', subtext: 'Coach, Michael Kors & Kate Spade.', imageUrl: 'https://images.unsplash.com/photo-1600857062241-98e5dba7f214?auto=format&fit=crop&q=80&w=600' },
-    { id: 'hd2', name: 'TRAVEL', label: 'UP TO 40% OFF', subtext: 'Luggage & weekenders for your next trip.', imageUrl: 'https://images.unsplash.com/photo-1553062407-98eebda4527a?auto=format&fit=crop&q=80&w=600' },
-    { id: 'hd3', name: 'WALLETS', label: 'BUY 1 GET 1 FREE', subtext: 'Small leather goods to match.', imageUrl: 'https://images.unsplash.com/photo-1627123424574-724758594e93?auto=format&fit=crop&q=80&w=600' },
+    { id: 'hd1', name: 'DESIGNER', label: 'STARTING AT $129', subtext: 'Coach, Michael Kors & Kate Spade.', imageUrl: getImageByIndex(67) },
+    { id: 'hd2', name: 'TRAVEL', label: 'UP TO 40% OFF', subtext: 'Luggage & weekenders for your next trip.', imageUrl: getImageByIndex(68) },
+    { id: 'hd3', name: 'WALLETS', label: 'BUY 1 GET 1 FREE', subtext: 'Small leather goods to match.', imageUrl: getImageByIndex(69) },
   ];
 
   const products: Product[] = Array(6).fill(null).map((_, i) => ({
     id: `h-prod-${i}`,
     brand: "Michael Kors",
     name: "Jet Set Large Saffiano Leather Crossbody Bag",
-    price: "$149.00",
-    originalPrice: "$298.00",
+    price: "UGX 485,000",
+    originalPrice: "UGX 750,000",
     discount: "(50% off)",
     rating: 4.9,
     reviews: 2105,
-    imageUrl: `https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&q=80&w=400&h=500&seed=handbags-${i}`,
+    imageUrl: getImageByIndex(i + 70),
     badge: "Top Rated"
   }));
 
@@ -38,10 +46,10 @@ const HandbagsPage: React.FC = () => {
     <div className="w-full">
       {/* Hero */}
       <div className="relative h-[400px] bg-amber-50 flex items-center justify-center overflow-hidden">
-        <img 
-          src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&q=80&w=1800" 
-          className="absolute inset-0 w-full h-full object-cover opacity-90" 
-          alt="Handbags Collection" 
+        <img
+          src={getImageByIndex(79)}
+          className="absolute inset-0 w-full h-full object-cover opacity-90"
+          alt="Handbags Collection"
         />
         <div className="relative z-10 text-center text-white drop-shadow-2xl">
           <h2 className="text-6xl font-black italic uppercase tracking-tighter mb-4">The Designer Event</h2>
@@ -50,7 +58,7 @@ const HandbagsPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-4 py-16">
+      <div className="max-w-[1600px] mx-auto px-4 py-16">
         <h2 className="text-[28px] font-black tracking-tight mb-8">Shop by Silhouette</h2>
         <CategoryRoundGrid categories={categories} />
 
@@ -60,8 +68,14 @@ const HandbagsPage: React.FC = () => {
         </div>
 
         <div className="mt-20">
-          <h2 className="text-[24px] font-bold mb-8">Most Wanted</h2>
-          <ProductSlider products={products} />
+          <h2 className="text-[24px] font-bold mb-8">Bestsellers</h2>
+          <ProductSlider
+            products={products}
+            onProductClick={onProductClick}
+            onToggleWishlist={onToggleWishlist}
+            onQuickView={onQuickView}
+            wishlist={wishlist}
+          />
         </div>
       </div>
     </div>

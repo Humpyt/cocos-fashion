@@ -50,7 +50,7 @@ const DealCardGrid: React.FC<Props> = ({ categories }) => {
     <div className="relative group/grid w-full">
       {/* Left Navigation Arrow */}
       {showLeft && (
-        <button 
+        <button
           onClick={() => scroll('left')}
           className="absolute -left-6 top-[40%] -translate-y-1/2 bg-white w-12 h-12 rounded-full shadow-xl border border-gray-100 flex items-center justify-center hover:bg-gray-50 transition-all z-30"
           aria-label="Scroll left"
@@ -59,42 +59,57 @@ const DealCardGrid: React.FC<Props> = ({ categories }) => {
         </button>
       )}
 
-      <div 
+      <div
         ref={scrollRef}
         className="flex gap-[18px] overflow-x-auto hide-scrollbar snap-x snap-mandatory px-1"
       >
         {categories.map((cat) => (
-          <div 
-            key={cat.id} 
-            className="relative min-w-[280px] md:min-w-[310px] aspect-[4/5] bg-[#F3F3F3] snap-start cursor-pointer group/card flex-shrink-0"
+          <div
+            key={cat.id}
+            className="relative min-w-[280px] md:min-w-[340px] aspect-[4/5] bg-gray-100 snap-start cursor-pointer group/card flex-shrink-0 overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500"
           >
-            {/* Image */}
-            <img 
-              src={cat.imageUrl} 
-              alt={cat.name} 
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-[1.02]" 
+            {/* Image with zoom effect */}
+            <img
+              src={cat.imageUrl}
+              alt={cat.name}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110"
             />
-            
-            {/* Text Overlay - Top Left Aligned */}
-            <div className="absolute inset-0 z-10 p-5 md:p-6 flex flex-col items-start bg-gradient-to-b from-white/15 via-transparent to-transparent">
-              <h3 className="text-[32px] md:text-[38px] font-medium leading-[1.1] tracking-tight text-black mb-1">{cat.label}</h3>
-              <p className="text-[12px] font-bold uppercase tracking-wider text-black mb-1">{cat.name}</p>
+
+            {/* Dark Gradient Bottom Overlay */}
+            <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10 transition-opacity duration-300 group-hover/card:opacity-90"></div>
+
+            {/* Discount Tag - Top Right */}
+            <div className="absolute top-4 right-4 z-20">
+              <div className="bg-cocos-orange text-white px-4 py-1.5 font-black text-sm uppercase tracking-tighter shadow-lg transform -rotate-2 group-hover/card:rotate-0 transition-transform">
+                {cat.label}
+              </div>
+            </div>
+
+            {/* Bottom Content Area */}
+            <div className="absolute inset-x-0 bottom-0 z-20 p-6 md:p-8 transform translate-y-2 group-hover/card:translate-y-0 transition-transform duration-500">
+              <p className="text-cocos-orange text-[10px] md:text-xs font-black uppercase tracking-[0.3em] mb-2 drop-shadow-sm">
+                {cat.name}
+              </p>
+              <h3 className="text-white text-2xl md:text-3xl font-black italic tracking-tighter leading-tight uppercase mb-3 font-serif-promo">
+                {cat.subtext?.split(' ').slice(0, 3).join(' ') || 'Seasonal Deals'}
+              </h3>
+
+              {/* Animated Underline */}
+              <div className="h-1 w-12 bg-cocos-orange transition-all duration-500 group-hover/card:w-full"></div>
+
               {cat.subtext && (
-                <p className="text-[11px] text-gray-800 font-normal leading-tight max-w-[180px]">
+                <p className="text-gray-300 text-[11px] md:text-[12px] font-medium leading-relaxed mt-4 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500 delay-100">
                   {cat.subtext}
                 </p>
               )}
             </div>
-            
-            {/* Border effect on hover */}
-            <div className="absolute inset-0 border-0 group-hover/card:border-1 border-gray-200/50 pointer-events-none"></div>
           </div>
         ))}
       </div>
-      
+
       {/* Right Navigation Arrow */}
       {showRight && (
-        <button 
+        <button
           onClick={() => scroll('right')}
           className="absolute -right-6 top-[40%] -translate-y-1/2 bg-white w-12 h-12 rounded-full shadow-xl border border-gray-100 flex items-center justify-center hover:bg-gray-50 transition-all z-30"
           aria-label="Scroll right"

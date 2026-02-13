@@ -7,10 +7,11 @@ interface Props {
   products: Product[];
   onProductClick?: (product: Product) => void;
   onToggleWishlist?: (product: Product) => void;
+  onQuickView?: (product: Product) => void;
   wishlist?: Product[];
 }
 
-const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWishlist, wishlist = [] }) => {
+const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWishlist, onQuickView, wishlist = [] }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
@@ -44,30 +45,30 @@ const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWish
 
   return (
     <div className="relative group/slider px-2">
-      <div 
+      <div
         ref={scrollRef}
         className="flex gap-[32px] overflow-x-auto hide-scrollbar snap-x pb-12 pt-4"
       >
         {products.map((product) => (
-          <div 
-            key={product.id} 
+          <div
+            key={product.id}
             className="min-w-[260px] md:min-w-[320px] snap-start bg-white cursor-pointer group/item flex flex-col"
             onClick={() => onProductClick?.(product)}
           >
             {/* Visual Container */}
             <div className="relative aspect-[4/5] overflow-hidden bg-[#F8F8F8] rounded-none mb-6">
-              <img 
-                src={product.imageUrl} 
-                alt={product.name} 
-                className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/item:scale-110" 
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/item:scale-110"
               />
-              
+
               {/* Interaction Overlay */}
               <div className="absolute inset-0 bg-black/5 opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
 
               {/* Action Buttons */}
               <div className="absolute top-5 right-5 flex flex-col gap-3 translate-x-12 opacity-0 group-hover/item:translate-x-0 group-hover/item:opacity-100 transition-all duration-500">
-                <button 
+                <button
                   className={`w-11 h-11 bg-white rounded-full flex items-center justify-center shadow-2xl transition-all transform hover:scale-110 ${isInWishlist(product.id) ? 'text-cocos-orange' : 'text-black hover:text-cocos-orange'}`}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -76,11 +77,15 @@ const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWish
                 >
                   <Heart size={20} fill={isInWishlist(product.id) ? "currentColor" : "none"} />
                 </button>
-                <button 
+                <button
                   className="w-11 h-11 bg-white rounded-full flex items-center justify-center shadow-2xl hover:bg-cocos-orange hover:text-white transition-all transform hover:scale-110"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onProductClick?.(product);
+                    if (onQuickView) {
+                      onQuickView(product);
+                    } else {
+                      onProductClick?.(product);
+                    }
                   }}
                 >
                   <Eye size={20} className="text-black group-hover:text-inherit" />
@@ -96,26 +101,26 @@ const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWish
 
               {/* Quick Add Bar */}
               <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover/item:translate-y-0 transition-transform duration-300 bg-black p-4 flex justify-center">
-                 <button className="flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-[0.3em] hover:text-cocos-orange transition-colors">
-                   <ShoppingBag size={14} /> Quick Add
-                 </button>
+                <button className="flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-[0.3em] hover:text-cocos-orange transition-colors">
+                  <ShoppingBag size={14} /> Quick Add
+                </button>
               </div>
             </div>
-            
+
             {/* Typography & Details */}
             <div className="flex flex-col flex-grow px-1">
               <div className="flex justify-between items-start mb-3">
                 <span className="text-[11px] font-black uppercase tracking-[0.3em] text-gray-400">{product.brand}</span>
                 <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded-sm">
-                   <Star size={12} fill="#FF7D00" className="text-cocos-orange" />
-                   <span className="text-[11px] font-black">{product.rating}</span>
+                  <Star size={12} fill="#FF7D00" className="text-cocos-orange" />
+                  <span className="text-[11px] font-black">{product.rating}</span>
                 </div>
               </div>
 
               <h3 className="font-serif-promo text-[18px] md:text-[22px] text-black font-medium leading-[1.2] mb-4 line-clamp-1 group-hover/item:text-cocos-orange transition-colors">
                 {product.name}
               </h3>
-              
+
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-cocos-orange font-black text-[22px] tracking-tighter">{product.price}</span>
                 {product.discount && (
@@ -129,24 +134,24 @@ const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWish
               {/* Star Rewards Interactive Bar */}
               <div className="mt-auto border-t border-gray-100 pt-5 flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                   <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></div>
-                   <p className="text-[11px] font-bold text-[#0046BE] uppercase tracking-wider">
-                     UGX 40,000 Rewards
-                   </p>
+                  <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></div>
+                  <p className="text-[11px] font-bold text-[#0046BE] uppercase tracking-wider">
+                    UGX 40,000 Rewards
+                  </p>
                 </div>
                 <span className="text-[11px] text-gray-400 font-bold">({product.reviews})</span>
               </div>
-              
+
               {/* Color Swatches Grid */}
               {product.colors && product.colors.length > 0 && (
                 <div className="flex items-center gap-2.5 mt-5">
                   {product.colors.slice(0, 5).map((color, idx) => (
-                    <div 
-                      key={idx} 
+                    <div
+                      key={idx}
                       className={`w-6 h-6 rounded-full p-[2px] transition-all ring-offset-2 ${idx === 0 ? 'ring-2 ring-black' : 'hover:ring-1 hover:ring-gray-300'}`}
                     >
-                      <div 
-                        className="w-full h-full rounded-full border border-gray-100 shadow-inner" 
+                      <div
+                        className="w-full h-full rounded-full border border-gray-100 shadow-inner"
                         style={{ backgroundColor: color }}
                       />
                     </div>
@@ -163,7 +168,7 @@ const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWish
 
       {/* Modern Slider Navigation */}
       {showLeft && (
-        <button 
+        <button
           onClick={() => scroll('left')}
           className="absolute -left-8 top-[38%] -translate-y-1/2 bg-white w-16 h-16 rounded-full shadow-2xl border border-gray-100 flex items-center justify-center z-20 hover:scale-110 hover:bg-cocos-orange hover:text-white transition-all duration-500 group/nav"
         >
@@ -171,7 +176,7 @@ const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWish
         </button>
       )}
       {showRight && (
-        <button 
+        <button
           onClick={() => scroll('right')}
           className="absolute -right-8 top-[38%] -translate-y-1/2 bg-white w-16 h-16 rounded-full shadow-2xl border border-gray-100 flex items-center justify-center z-20 hover:scale-110 hover:bg-cocos-orange hover:text-white transition-all duration-500 group/nav"
         >

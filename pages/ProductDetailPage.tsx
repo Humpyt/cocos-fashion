@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Star, Heart, Share2, Info, ChevronRight, Truck, Store, ShieldCheck } from 'lucide-react';
 import { Product } from '../types';
+import { getImageByIndex } from '../imageStore';
 import ProductSlider from '../components/ProductSlider';
 
 interface Props {
@@ -21,9 +22,9 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
   const thumbnails = [
     product.imageUrl,
-    "https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&q=80&w=400",
-    "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&q=80&w=400",
-    "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=400"
+    getImageByIndex(10),
+    getImageByIndex(12),
+    getImageByIndex(14)
   ];
 
   const isInWishlist = wishlist.some(p => p.id === product.id);
@@ -37,7 +38,7 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
   return (
     <div className="w-full bg-white pb-20 md:pb-0">
       {/* Breadcrumbs - Scrollable on mobile */}
-      <div className="max-w-[1400px] mx-auto px-4 py-4 text-[10px] md:text-[11px] text-gray-500 uppercase font-bold flex items-center gap-1.5 tracking-wider overflow-x-auto whitespace-nowrap hide-scrollbar">
+      <div className="max-w-[1600px] mx-auto px-4 py-4 text-[10px] md:text-[11px] text-gray-500 uppercase font-bold flex items-center gap-1.5 tracking-wider overflow-x-auto whitespace-nowrap hide-scrollbar">
         <span className="hover:text-cocos-orange cursor-pointer shrink-0">Coco's</span>
         <ChevronRight size={10} className="shrink-0" />
         <span className="hover:text-cocos-orange cursor-pointer shrink-0">Women</span>
@@ -47,14 +48,14 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
         <span className="text-black shrink-0">{product.name}</span>
       </div>
 
-      <div className="max-w-[1400px] mx-auto px-4 md:py-8 flex flex-col lg:flex-row gap-8 lg:gap-12">
+      <div className="max-w-[1600px] mx-auto px-4 md:py-8 flex flex-col lg:flex-row gap-8 lg:gap-12">
         {/* Left: Image Gallery */}
         <div className="w-full lg:w-[60%] flex flex-col-reverse md:flex-row gap-4">
           {/* Thumbnails - Horizontal on mobile, Vertical on desktop */}
           <div className="flex md:flex-col gap-3 md:w-20 overflow-x-auto hide-scrollbar md:overflow-visible py-1">
             {thumbnails.map((img, i) => (
-              <button 
-                key={i} 
+              <button
+                key={i}
                 onClick={() => setMainImage(img)}
                 className={`w-16 md:w-full aspect-square shrink-0 border p-0.5 transition-all ${mainImage === img ? 'border-cocos-orange' : 'border-gray-200'}`}
               >
@@ -66,7 +67,7 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
           {/* Main Image */}
           <div className="flex-grow relative aspect-[4/5] bg-gray-50 overflow-hidden rounded-sm">
             <img src={mainImage} alt={product.name} className="w-full h-full object-cover" />
-            <button 
+            <button
               className={`absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg transition-all ${isInWishlist ? 'text-cocos-orange' : 'hover:text-cocos-orange'}`}
               onClick={() => onToggleWishlist?.(product)}
             >
@@ -114,8 +115,8 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
                 <p className="text-[11px] font-black uppercase mb-3 tracking-widest text-gray-500">Color: <span className="text-black">Selected</span></p>
                 <div className="flex flex-wrap gap-3">
                   {product.colors.map((color, idx) => (
-                    <button 
-                      key={idx} 
+                    <button
+                      key={idx}
                       onClick={() => setSelectedColor(color)}
                       className={`w-10 h-10 rounded-full p-1 border transition-all ${selectedColor === color ? 'border-cocos-orange' : 'border-transparent'}`}
                     >
@@ -133,7 +134,7 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
               </div>
               <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-4 gap-2">
                 {sizes.map((size) => (
-                  <button 
+                  <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
                     className={`h-11 border text-[12px] font-bold transition-all uppercase tracking-widest ${selectedSize === size ? 'border-black bg-black text-white' : 'border-gray-200 hover:border-cocos-orange'}`}
@@ -148,15 +149,15 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
           {/* Floating Mobile Action Bar - UX improvement */}
           <div className="fixed md:static bottom-0 left-0 right-0 bg-white md:bg-transparent border-t md:border-t-0 p-4 md:p-0 z-[40] flex gap-3 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] md:shadow-none">
             <div className="hidden sm:flex md:flex w-24 border border-gray-300 items-center">
-              <select 
+              <select
                 className="w-full h-full px-4 text-xs font-bold bg-white outline-none appearance-none"
                 value={quantity}
                 onChange={(e) => setQuantity(Number(e.target.value))}
               >
-                {[1,2,3,4,5].map(q => <option key={q} value={q}>{q}</option>)}
+                {[1, 2, 3, 4, 5].map(q => <option key={q} value={q}>{q}</option>)}
               </select>
             </div>
-            <button 
+            <button
               onClick={handleAddToBag}
               className="flex-grow bg-black text-white py-4 font-black uppercase text-xs tracking-[0.2em] hover:bg-cocos-orange hover:text-black transition-all shadow-xl"
             >
