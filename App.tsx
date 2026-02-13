@@ -1,0 +1,152 @@
+
+import React, { useState, useEffect } from 'react';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
+import WomenPage from './pages/WomenPage';
+import MenPage from './pages/MenPage';
+import ShoesPage from './pages/ShoesPage';
+import HandbagsPage from './pages/HandbagsPage';
+import ProductDetailPage from './pages/ProductDetailPage';
+import CartPage from './pages/CartPage';
+import CheckoutPage from './pages/CheckoutPage';
+import AuthPage from './pages/AuthPage';
+import DashboardPage from './pages/DashboardPage';
+import { Product, CartItem, User } from './types';
+
+const App: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage, selectedProduct]);
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    setCurrentPage('productDetail');
+  };
+
+  const addToCart = (product: Product, quantity: number, size?: string, color?: string) => {
+    setCart(prevCart => {
+      const existingItemIndex = prevCart.findIndex(
+        item => item.id === product.id && item.selectedSize === size && item.selectedColor === color
+      );
+
+      if (existingItemIndex > -1) {
+        const newCart = [...prevCart];
+        newCart[existingItemIndex].quantity += quantity;
+        return newCart;
+      }
+
+      return [...prevCart, { ...product, quantity, selectedSize: size, selectedColor: color }];
+    });
+    setCurrentPage('cart');
+  };
+
+  const removeFromCart = (id: string, size?: string, color?: string) => {
+    setCart(prevCart => prevCart.filter(item => 
+      !(item.id === id && item.selectedSize === size && item.selectedColor === color)
+    ));
+  };
+
+  const updateQuantity = (id: string, quantity: number, size?: string, color?: string) => {
+    setCart(prevCart => prevCart.map(item => 
+      (item.id === id && item.selectedSize === size && item.selectedColor === color)
+        ? { ...item, quantity }
+        : item
+    ));
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  const handleSignIn = (userData: User) => {
+    setUser(userData);
+    setCurrentPage('dashboard');
+  };
+
+  const handleSignOut = () => {
+    setUser(null);
+    setCurrentPage('home');
+  };
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'home':
+        return <HomePage onNavigate={setCurrentPage} onProductClick={handleProductClick} />;
+      case 'women':
+        return <WomenPage onProductClick={handleProductClick} />;
+      case 'men':
+        return <MenPage onProductClick={handleProductClick} />;
+      case 'shoes':
+        return <ShoesPage onProductClick={handleProductClick} />;
+      case 'handbags':
+        return <HandbagsPage onProductClick={handleProductClick} />;
+      case 'cart':
+        return (
+          <CartPage 
+            cart={cart} 
+            onRemove={removeFromCart} 
+            onUpdateQuantity={updateQuantity}
+            onProductClick={handleProductClick}
+            onNavigate={setCurrentPage}
+          />
+        );
+      case 'checkout':
+        return (
+          <CheckoutPage 
+            cart={cart}
+            onNavigate={setCurrentPage}
+            onOrderComplete={() => {
+              clearCart();
+              setCurrentPage('home');
+            }}
+          />
+        );
+      case 'auth':
+        return <AuthPage onSignIn={handleSignIn} onNavigate={setCurrentPage} />;
+      case 'dashboard':
+        return user ? (
+          <DashboardPage user={user} onSignOut={handleSignOut} onNavigate={setCurrentPage} />
+        ) : (
+          <AuthPage onSignIn={handleSignIn} onNavigate={setCurrentPage} />
+        );
+      case 'productDetail':
+        return selectedProduct ? (
+          <ProductDetailPage 
+            product={selectedProduct} 
+            onProductClick={handleProductClick} 
+            onAddToBag={addToCart}
+          />
+        ) : (
+          <HomePage onNavigate={setCurrentPage} onProductClick={handleProductClick} />
+        );
+      default:
+        return <HomePage onNavigate={setCurrentPage} onProductClick={handleProductClick} />;
+    }
+  };
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header 
+        onNavigate={setCurrentPage} 
+        currentPage={currentPage} 
+        cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)} 
+        user={user}
+      />
+      
+      <main className="flex-grow">
+        {renderPage()}
+      </main>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default App;
