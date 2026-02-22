@@ -1,27 +1,91 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Category, Product } from '../types';
 import DealCardGrid from '../components/DealCardGrid';
 import ProductSlider from '../components/ProductSlider';
 import CategoryRoundGrid from '../components/CategoryRoundGrid';
 import { getImageByIndex } from '../imageStore';
+import { ApiCategory } from '../lib/api';
 
 interface Props {
+  apiProducts?: Product[];
+  apiCategories?: ApiCategory[];
   onProductClick?: (product: Product) => void;
   onToggleWishlist?: (product: Product) => void;
   onQuickView?: (product: Product) => void;
   wishlist?: Product[];
 }
 
-const WomenPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQuickView, wishlist = [] }) => {
-  const categories: Category[] = [
-    { id: 'w1', name: 'Dresses', imageUrl: getImageByIndex(11) },
-    { id: 'w2', name: 'Coats', imageUrl: getImageByIndex(12) },
-    { id: 'w3', name: 'Shoes', imageUrl: getImageByIndex(13) },
-    { id: 'w4', name: 'Handbags', imageUrl: getImageByIndex(14) },
-    { id: 'w5', name: 'Activewear', imageUrl: getImageByIndex(15) },
-    { id: 'w6', name: 'Jewelry', imageUrl: getImageByIndex(16) },
-  ];
+const toTitleCase = (value: string) =>
+  value
+    .split('-')
+    .filter(Boolean)
+    .map((part) => `${part[0]?.toUpperCase() ?? ''}${part.slice(1)}`)
+    .join(' ');
+
+const slugImageMap: Record<string, string> = {
+  women: '/women.jpg',
+  dresses: getImageByIndex(0),
+  shoes: getImageByIndex(13),
+  handbags: getImageByIndex(14),
+  activewear: getImageByIndex(15),
+  jewelry: getImageByIndex(16),
+  fragrance: getImageByIndex(80),
+  watches: getImageByIndex(34),
+  gifts: getImageByIndex(95),
+  home: getImageByIndex(94),
+  men: getImageByIndex(31),
+};
+const fallbackCategoryImageIndexes = [11, 12, 17, 18, 19, 20, 21, 22];
+
+const resolveCategoryImage = (slug: string, index: number): string => {
+  return slugImageMap[slug] ?? getImageByIndex(fallbackCategoryImageIndexes[index % fallbackCategoryImageIndexes.length]);
+};
+
+const WomenPage: React.FC<Props> = ({
+  apiProducts = [],
+  apiCategories = [],
+  onProductClick,
+  onToggleWishlist,
+  onQuickView,
+  wishlist = [],
+}) => {
+  const womenProducts = useMemo(
+    () => apiProducts.filter((item) => item.categorySlugs?.includes('women')),
+    [apiProducts],
+  );
+
+  const categories = useMemo<Category[]>(() => {
+    const relevantSlugs = new Set<string>();
+    for (const product of womenProducts) {
+      for (const slug of product.categorySlugs ?? []) {
+        relevantSlugs.add(slug);
+      }
+    }
+    relevantSlugs.add('women');
+
+    const activeRelevantCategories = apiCategories.filter(
+      (category) => category.productCount > 0 && (category.slug === 'women' || relevantSlugs.has(category.slug)),
+    );
+
+    const sourceCategories =
+      activeRelevantCategories.length > 0
+        ? activeRelevantCategories
+        : [...relevantSlugs]
+            .sort((left, right) => left.localeCompare(right))
+            .map((slug, index) => ({
+              id: `fallback-${slug}-${index}`,
+              slug,
+              name: toTitleCase(slug),
+              productCount: 0,
+            }));
+
+    return sourceCategories.map((category, index) => ({
+      id: category.id,
+      name: category.name,
+      imageUrl: resolveCategoryImage(category.slug, index),
+    }));
+  }, [apiCategories, womenProducts]);
 
   const deals: Category[] = [
     { id: 'd1', name: 'CLOTHING', label: '30-50% OFF', subtext: 'Fresh arrivals in every fit.', imageUrl: getImageByIndex(17) },
@@ -29,26 +93,14 @@ const WomenPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQuickV
     { id: 'd3', name: 'ACCESSORIES', label: 'BUY 1 GET 1 50% OFF', subtext: 'Scarves, hats & more.', imageUrl: getImageByIndex(19) },
   ];
 
-  const products: Product[] = Array(8).fill(null).map((_, i) => ({
-    id: `w-prod-${i}`,
-    brand: "Free People",
-    name: "Women's Dreamy Velvet Midi Dress",
-    price: "UGX 245,000",
-    originalPrice: "UGX 380,000",
-    discount: "(35% off)",
-    rating: 4.7,
-    reviews: 312,
-    imageUrl: getImageByIndex(i + 1),
-    badge: "New Arrival",
-    colors: ['#4B0082', '#000000', '#8B0000']
-  }));
+  const products = womenProducts.slice(0, 8);
 
   return (
     <div className="w-full">
       {/* Hero */}
       <div className="relative h-[400px] bg-pink-100 flex items-center justify-center overflow-hidden">
         <img
-          src={getImageByIndex(27)}
+          src="/women.jpg"
           className="absolute inset-0 w-full h-full object-cover opacity-80"
           alt="Women's Fashion"
         />
@@ -70,13 +122,19 @@ const WomenPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQuickV
 
         <div className="mt-20">
           <h2 className="text-[24px] font-bold mb-8">Trending Now</h2>
-          <ProductSlider
-            products={products}
-            onProductClick={onProductClick}
-            onToggleWishlist={onToggleWishlist}
-            onQuickView={onQuickView}
-            wishlist={wishlist}
-          />
+          {products.length ? (
+            <ProductSlider
+              products={products}
+              onProductClick={onProductClick}
+              onToggleWishlist={onToggleWishlist}
+              onQuickView={onQuickView}
+              wishlist={wishlist}
+            />
+          ) : (
+            <div className="border border-dashed border-gray-300 p-8 text-center text-sm text-gray-600">
+              No products available yet.
+            </div>
+          )}
         </div>
       </div>
     </div>

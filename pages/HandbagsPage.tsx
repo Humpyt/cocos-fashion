@@ -7,13 +7,14 @@ import CategoryRoundGrid from '../components/CategoryRoundGrid';
 import { getImageByIndex } from '../imageStore';
 
 interface Props {
+  apiProducts?: Product[];
   onProductClick?: (product: Product) => void;
   onToggleWishlist?: (product: Product) => void;
   onQuickView?: (product: Product) => void;
   wishlist?: Product[];
 }
 
-const HandbagsPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQuickView, wishlist = [] }) => {
+const HandbagsPage: React.FC<Props> = ({ apiProducts = [], onProductClick, onToggleWishlist, onQuickView, wishlist = [] }) => {
   const categories: Category[] = [
     { id: 'h1', name: 'Totes', imageUrl: getImageByIndex(61) },
     { id: 'h2', name: 'Crossbody', imageUrl: getImageByIndex(62) },
@@ -29,18 +30,9 @@ const HandbagsPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQui
     { id: 'hd3', name: 'WALLETS', label: 'BUY 1 GET 1 FREE', subtext: 'Small leather goods to match.', imageUrl: getImageByIndex(69) },
   ];
 
-  const products: Product[] = Array(6).fill(null).map((_, i) => ({
-    id: `h-prod-${i}`,
-    brand: "Michael Kors",
-    name: "Jet Set Large Saffiano Leather Crossbody Bag",
-    price: "UGX 485,000",
-    originalPrice: "UGX 750,000",
-    discount: "(50% off)",
-    rating: 4.9,
-    reviews: 2105,
-    imageUrl: getImageByIndex(i + 70),
-    badge: "Top Rated"
-  }));
+  const products = apiProducts
+    .filter((item) => item.categorySlugs?.includes('handbags'))
+    .slice(0, 6);
 
   return (
     <div className="w-full">
@@ -69,13 +61,19 @@ const HandbagsPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQui
 
         <div className="mt-20">
           <h2 className="text-[24px] font-bold mb-8">Bestsellers</h2>
-          <ProductSlider
-            products={products}
-            onProductClick={onProductClick}
-            onToggleWishlist={onToggleWishlist}
-            onQuickView={onQuickView}
-            wishlist={wishlist}
-          />
+          {products.length ? (
+            <ProductSlider
+              products={products}
+              onProductClick={onProductClick}
+              onToggleWishlist={onToggleWishlist}
+              onQuickView={onQuickView}
+              wishlist={wishlist}
+            />
+          ) : (
+            <div className="border border-dashed border-gray-300 p-8 text-center text-sm text-gray-600">
+              No products available yet.
+            </div>
+          )}
         </div>
       </div>
     </div>

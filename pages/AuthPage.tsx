@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { User } from '../types';
 import { Eye, EyeOff, ChevronRight } from 'lucide-react';
+import { authApi, tokenStore } from '../lib/api';
 
 interface Props {
   onSignIn: (user: User) => void;
@@ -11,20 +12,30 @@ interface Props {
 const AuthPage: React.FC<Props> = ({ onSignIn, onNavigate }) => {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock user for demonstration
-    const mockUser: User = {
-      id: 'u123',
-      firstName: 'Jane',
-      lastName: 'Doe',
-      email: 'jane.doe@example.com',
-      starRewardsTier: 'Silver',
-      points: 750,
-      nextTierPoints: 1000,
-    };
-    onSignIn(mockUser);
+    setErrorMessage('');
+    setIsSubmitting(true);
+
+    try {
+      const authResponse = mode === 'signin'
+        ? await authApi.login({ email, password })
+        : await authApi.register({ email, password, firstName, lastName });
+
+      tokenStore.setAccessToken(authResponse.accessToken);
+      onSignIn(authResponse.user as User);
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : 'Authentication failed');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -42,6 +53,8 @@ const AuthPage: React.FC<Props> = ({ onSignIn, onNavigate }) => {
               <input 
                 type="email" 
                 required 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="bg-white text-black border border-gray-300 px-4 py-3 outline-none focus:border-black transition-all placeholder:text-gray-400"
                 placeholder="example@email.com"
               />
@@ -51,11 +64,23 @@ const AuthPage: React.FC<Props> = ({ onSignIn, onNavigate }) => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold uppercase text-gray-500">First Name*</label>
-                  <input type="text" required className="bg-white text-black border border-gray-300 px-4 py-3 outline-none focus:border-black transition-all" />
+                  <input
+                    type="text"
+                    required={mode === 'signup'}
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    className="bg-white text-black border border-gray-300 px-4 py-3 outline-none focus:border-black transition-all"
+                  />
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[11px] font-bold uppercase text-gray-500">Last Name*</label>
-                  <input type="text" required className="bg-white text-black border border-gray-300 px-4 py-3 outline-none focus:border-black transition-all" />
+                  <input
+                    type="text"
+                    required={mode === 'signup'}
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    className="bg-white text-black border border-gray-300 px-4 py-3 outline-none focus:border-black transition-all"
+                  />
                 </div>
               </div>
             )}
@@ -65,6 +90,8 @@ const AuthPage: React.FC<Props> = ({ onSignIn, onNavigate }) => {
               <input 
                 type={showPassword ? "text" : "password"} 
                 required 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="bg-white text-black border border-gray-300 px-4 py-3 outline-none focus:border-black transition-all"
               />
               <button 
@@ -86,8 +113,12 @@ const AuthPage: React.FC<Props> = ({ onSignIn, onNavigate }) => {
               </div>
             )}
 
-            <button type="submit" className="bg-black text-white py-4 font-black uppercase text-sm tracking-widest hover:bg-gray-800 transition-colors mt-4">
-              {mode === 'signin' ? 'Sign In' : 'Create Account'}
+            {errorMessage && (
+              <p className="text-xs text-red-600 font-bold">{errorMessage}</p>
+            )}
+
+            <button type="submit" disabled={isSubmitting} className="bg-black text-white py-4 font-black uppercase text-sm tracking-widest hover:bg-gray-800 transition-colors mt-4 disabled:opacity-50">
+              {isSubmitting ? 'Please wait...' : (mode === 'signin' ? 'Sign In' : 'Create Account')}
             </button>
 
             <p className="text-[10px] text-gray-500 text-center leading-relaxed">

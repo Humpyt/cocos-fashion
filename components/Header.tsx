@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Search, Heart, ShoppingBag, Menu, X, User as UserIcon, ChevronRight } from 'lucide-react';
+import { Search, Heart, ShoppingBag, Menu, X, User as UserIcon, ChevronRight, ChevronDown } from 'lucide-react';
 import { User } from '../types';
 
 interface HeaderProps {
@@ -13,9 +13,11 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, cartCount = 0, wishlistCount = 0, user }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   const categories = [
     { id: 'home', label: 'Shop All' },
+    { id: 'about', label: 'About' },
     { id: 'women', label: 'Women' },
     { id: 'men', label: 'Men' },
     { id: 'shoes', label: 'Shoes' },
@@ -23,6 +25,13 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, cartCount = 0,
     { id: 'gifts', label: 'Gifts' },
     { id: 'now', label: 'Now & Trending' },
     { id: 'sale', label: 'Sale', isOrange: true }
+  ];
+  const aboutLinks = [
+    { id: 'about', label: "About Coco's" },
+    { id: 'vision', label: 'Vision' },
+    { id: 'mission', label: 'Mission' },
+    { id: 'core-values', label: 'Core Values' },
+    { id: 'home-ground', label: 'Home Ground' },
   ];
 
   const handleMobileNav = (id: string) => {
@@ -100,10 +109,17 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, cartCount = 0,
           </div>
 
           {user ? (
-            <button onClick={() => onNavigate('dashboard')} className="flex items-center gap-2 bg-gray-100 px-4 py-2.5 rounded-sm hover:bg-gray-200 border border-gray-200">
-              <UserIcon size={18} />
-              <span className="text-xs font-bold uppercase tracking-wider">Account</span>
-            </button>
+            <div className="flex items-center gap-2">
+              <button onClick={() => onNavigate('dashboard')} className="flex items-center gap-2 bg-gray-100 px-4 py-2.5 rounded-sm hover:bg-gray-200 border border-gray-200">
+                <UserIcon size={18} />
+                <span className="text-xs font-bold uppercase tracking-wider">Account</span>
+              </button>
+              {user.role === 'ADMIN' && (
+                <button onClick={() => onNavigate('admin')} className="bg-black text-white text-xs font-bold px-4 py-2.5 rounded-sm hover:bg-gray-800 uppercase tracking-wider">
+                  Admin
+                </button>
+              )}
+            </div>
           ) : (
             <button onClick={() => onNavigate('auth')} className="bg-black text-white text-xs font-bold px-8 py-3.5 rounded-sm hover:bg-gray-800 uppercase tracking-widest">Sign In</button>
           )}
@@ -132,17 +148,50 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, cartCount = 0,
       <nav className="hidden md:block w-full border-t border-gray-100">
         <div className="max-w-[1600px] mx-auto flex items-center px-4 py-3 text-[12px] font-bold overflow-x-auto hide-scrollbar">
           <div className="flex gap-8 items-center whitespace-nowrap">
-            {categories.map((cat, idx) => (
-              <React.Fragment key={cat.id}>
-                <button
-                  onClick={() => onNavigate(cat.id)}
-                  className={`uppercase pb-1 border-b-2 transition-all ${cat.isOrange ? 'text-cocos-orange font-black hover:underline' : (currentPage === cat.id ? 'text-cocos-orange border-cocos-orange' : 'border-transparent text-black hover:text-cocos-orange')}`}
-                >
-                  {cat.label}
-                </button>
-                {idx === 0 && <div className="h-4 w-[1px] bg-gray-300 mx-1"></div>}
-              </React.Fragment>
-            ))}
+            {categories.map((cat, idx) => {
+              if (cat.id === 'about') {
+                const isAboutPage = ['about', 'vision', 'mission', 'core-values', 'home-ground'].includes(currentPage);
+                return (
+                  <React.Fragment key={cat.id}>
+                    <div className="relative" onMouseEnter={() => setIsAboutOpen(true)} onMouseLeave={() => setIsAboutOpen(false)}>
+                      <button
+                        onClick={() => setIsAboutOpen((prev) => !prev)}
+                        className={`uppercase pb-1 border-b-2 transition-all inline-flex items-center gap-1 ${isAboutPage ? 'text-cocos-orange border-cocos-orange' : 'border-transparent text-black hover:text-cocos-orange'}`}
+                      >
+                        {cat.label}
+                        <ChevronDown size={14} className={`transition-transform ${isAboutOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      {isAboutOpen && (
+                        <div className="absolute left-0 top-full mt-2 w-52 bg-white border border-gray-200 shadow-lg z-50 py-2">
+                          {aboutLinks.map((item) => (
+                            <button
+                              key={item.id}
+                              onClick={() => onNavigate(item.id)}
+                              className={`w-full text-left px-4 py-2 text-[12px] font-bold uppercase tracking-wide hover:bg-gray-50 ${currentPage === item.id ? 'text-cocos-orange' : 'text-black'}`}
+                            >
+                              {item.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    {idx === 0 && <div className="h-4 w-[1px] bg-gray-300 mx-1"></div>}
+                  </React.Fragment>
+                );
+              }
+
+              return (
+                <React.Fragment key={cat.id}>
+                  <button
+                    onClick={() => onNavigate(cat.id)}
+                    className={`uppercase pb-1 border-b-2 transition-all ${cat.isOrange ? 'text-cocos-orange font-black hover:underline' : (currentPage === cat.id ? 'text-cocos-orange border-cocos-orange' : 'border-transparent text-black hover:text-cocos-orange')}`}
+                  >
+                    {cat.label}
+                  </button>
+                  {idx === 0 && <div className="h-4 w-[1px] bg-gray-300 mx-1"></div>}
+                </React.Fragment>
+              );
+            })}
           </div>
         </div>
       </nav>
@@ -156,7 +205,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, cartCount = 0,
               <button onClick={() => setIsMenuOpen(false)}><X size={24} /></button>
             </div>
             <div className="flex-grow overflow-y-auto p-4 flex flex-col gap-4">
-              <div className="bg-gray-50 p-4 rounded-sm flex items-center gap-4 mb-4" onClick={() => handleMobileNav('dashboard')}>
+              <div className="bg-gray-50 p-4 rounded-sm flex items-center gap-4 mb-4" onClick={() => handleMobileNav(user?.role === 'ADMIN' ? 'admin' : 'dashboard')}>
                 <UserIcon size={24} className="text-cocos-orange" />
                 <div>
                   <p className="text-xs font-bold text-gray-500 uppercase">My Account</p>
@@ -164,14 +213,37 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, cartCount = 0,
                 </div>
               </div>
               {categories.map(cat => (
-                <button
-                  key={cat.id}
-                  onClick={() => handleMobileNav(cat.id)}
-                  className="flex justify-between items-center py-3 border-b border-gray-100 text-sm font-bold uppercase tracking-widest text-left"
-                >
-                  <span className={cat.isOrange ? 'text-cocos-orange' : ''}>{cat.label}</span>
-                  <ChevronRight size={16} className="text-gray-400" />
-                </button>
+                cat.id === 'about' ? (
+                  <div key={cat.id} className="border-b border-gray-100 py-3">
+                    <button
+                      onClick={() => handleMobileNav('about')}
+                      className="w-full flex justify-between items-center text-sm font-bold uppercase tracking-widest text-left"
+                    >
+                      <span>{cat.label}</span>
+                      <ChevronRight size={16} className="text-gray-400" />
+                    </button>
+                    <div className="mt-2 pl-4 flex flex-col gap-2">
+                      {aboutLinks.map((item) => (
+                        <button
+                          key={item.id}
+                          onClick={() => handleMobileNav(item.id)}
+                          className="text-xs font-bold uppercase tracking-wide text-left text-gray-600 hover:text-cocos-orange"
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    key={cat.id}
+                    onClick={() => handleMobileNav(cat.id)}
+                    className="flex justify-between items-center py-3 border-b border-gray-100 text-sm font-bold uppercase tracking-widest text-left"
+                  >
+                    <span className={cat.isOrange ? 'text-cocos-orange' : ''}>{cat.label}</span>
+                    <ChevronRight size={16} className="text-gray-400" />
+                  </button>
+                )
               ))}
             </div>
             <div className="p-6 bg-stone-50 text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center">

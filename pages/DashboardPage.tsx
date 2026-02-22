@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { User, Order } from '../types';
 import { getImageByIndex } from '../imageStore';
 import {
@@ -14,6 +14,7 @@ import {
   Eye
 } from 'lucide-react';
 import { Product } from '../types';
+import { ordersApi, resolveMediaUrl, tokenStore } from '../lib/api';
 
 interface Props {
   user: User;
@@ -25,7 +26,7 @@ interface Props {
 const DashboardPage: React.FC<Props> = ({ user, onSignOut, onNavigate, onQuickView }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'wallet' | 'profile'>('overview');
 
-  const mockOrders: Order[] = [
+  const defaultOrders: Order[] = [
     {
       id: 'ORD-2025-001',
       date: 'Feb 12, 2025',
@@ -45,6 +46,59 @@ const DashboardPage: React.FC<Props> = ({ user, onSignOut, onNavigate, onQuickVi
       ]
     }
   ];
+  const [orders, setOrders] = useState<Order[]>(defaultOrders);
+  const [ordersError, setOrdersError] = useState('');
+
+  useEffect(() => {
+    const token = tokenStore.getAccessToken();
+    if (!token) {
+      return;
+    }
+
+    const loadOrders = async () => {
+      try {
+        const apiOrders = await ordersApi.list(token);
+        if (!apiOrders.length) {
+          setOrders([]);
+          return;
+        }
+
+        const mapped: Order[] = apiOrders.map((order) => ({
+          id: order.orderNumber,
+          date: new Date(order.createdAt).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          }),
+          total: `UGX ${order.totalMinor.toLocaleString()}`,
+          status: (() => {
+            switch (order.status) {
+              case 'DELIVERED':
+                return 'Delivered';
+              case 'SHIPPED':
+                return 'Shipped';
+              case 'CANCELLED':
+                return 'Cancelled';
+              case 'PROCESSING':
+              case 'PENDING':
+              default:
+                return 'Processing';
+            }
+          })(),
+          items: order.items.map((item) => ({
+            name: item.productName,
+            imageUrl: resolveMediaUrl(item.imageUrl) || getImageByIndex(0),
+          })),
+        }));
+
+        setOrders(mapped);
+      } catch (error) {
+        setOrdersError(error instanceof Error ? error.message : 'Failed to load orders');
+      }
+    };
+
+    void loadOrders();
+  }, []);
 
   const sidebarItems = [
     { id: 'overview', label: 'Dashboard', icon: Star },
@@ -59,7 +113,8 @@ const DashboardPage: React.FC<Props> = ({ user, onSignOut, onNavigate, onQuickVi
         return (
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl font-black uppercase tracking-tighter">Your Orders</h2>
-            {mockOrders.map(order => (
+            {ordersError && <p className="text-xs text-red-600 font-bold">{ordersError}</p>}
+            {orders.map(order => (
               <div key={order.id} className="bg-white border border-gray-200 p-6 flex flex-col md:flex-row gap-6 md:items-center">
                 <div className="flex-grow">
                   <div className="flex justify-between items-start mb-4">
@@ -151,11 +206,11 @@ const DashboardPage: React.FC<Props> = ({ user, onSignOut, onNavigate, onQuickVi
                 <button onClick={() => setActiveTab('orders')} className="text-[10px] font-black uppercase tracking-widest text-cocos-orange">View All</button>
               </div>
               <div className="flex items-center gap-6">
-                <img src={mockOrders[0].items[0].imageUrl} className="w-20 h-28 object-cover border border-gray-100" alt="Order" />
+                <img src={orders[0]?.items[0]?.imageUrl || getImageByIndex(0)} className="w-20 h-28 object-cover border border-gray-100" alt="Order" />
                 <div>
-                  <p className="text-[11px] font-bold text-gray-400 uppercase mb-1">Status: {mockOrders[0].status}</p>
-                  <p className="text-sm font-black mb-1">{mockOrders[0].items[0].name}</p>
-                  <p className="text-xs text-gray-500 mb-4">Arrived on {mockOrders[0].date}</p>
+                  <p className="text-[11px] font-bold text-gray-400 uppercase mb-1">Status: {orders[0]?.status || 'No Orders'}</p>
+                  <p className="text-sm font-black mb-1">{orders[0]?.items[0]?.name || 'Start shopping to place your first order'}</p>
+                  <p className="text-xs text-gray-500 mb-4">{orders[0] ? `Arrived on ${orders[0].date}` : 'No orders yet'}</p>
                   <button className="bg-black text-white px-6 py-2 text-[10px] font-black uppercase tracking-widest hover:bg-gray-800 transition-colors">Buy Again</button>
                 </div>
               </div>

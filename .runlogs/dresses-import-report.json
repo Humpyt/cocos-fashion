@@ -1,0 +1,395 @@
+{
+  "generatedAt": "2026-02-22T14:51:18.168Z",
+  "sourceDir": "D:\\WEB PROJECTS\\Cocos\\cocos-fashion\\public\\dresses",
+  "dryRun": false,
+  "summary": {
+    "filesDiscovered": 28,
+    "parsedFiles": 28,
+    "skippedFiles": 0,
+    "groups": 26,
+    "createdProducts": 0,
+    "updatedProducts": 26,
+    "createdVariants": 0,
+    "updatedVariants": 28
+  },
+  "skippedFiles": [],
+  "lowConfidence": [],
+  "groups": [
+    {
+      "slug": "adrianna-papell-dress-maroon-600000",
+      "brand": "Adrianna Papell",
+      "styleDescriptor": "Dress",
+      "color": "Maroon",
+      "priceMinor": 600000,
+      "sizes": [
+        "12US"
+      ],
+      "primaryImageUrl": "/dresses/Adrianna%20papell%2C%20maroon%20size%2012US%20600k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "adrianna-papell-dress-maroon-980000",
+      "brand": "Adrianna Papell",
+      "styleDescriptor": "Dress",
+      "color": "Maroon",
+      "priceMinor": 980000,
+      "sizes": [
+        "14US"
+      ],
+      "primaryImageUrl": "/dresses/Adrianna%20papell%2C%20maroon%20size%2014US.%20980k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "adrianna-papell-dress-navy-540000",
+      "brand": "Adrianna Papell",
+      "styleDescriptor": "Dress",
+      "color": "Navy",
+      "priceMinor": 540000,
+      "sizes": [
+        "4US"
+      ],
+      "primaryImageUrl": "/dresses/Adrianna%20papell%2C%20navy%20size%204US%20540k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "anne-klein-dress-soft-aloe-540000",
+      "brand": "Anne Klein",
+      "styleDescriptor": "Dress",
+      "color": "Soft Aloe",
+      "priceMinor": 540000,
+      "sizes": [
+        "6US"
+      ],
+      "primaryImageUrl": "/dresses/Anne%20klein%2C%20soft%20aloe%20size%206US.%20540k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "calvin-klein-dress-assorted-580000",
+      "brand": "Calvin Klein",
+      "styleDescriptor": "Dress",
+      "color": "Assorted",
+      "priceMinor": 580000,
+      "sizes": [
+        "6US"
+      ],
+      "primaryImageUrl": "/dresses/Calvin%20Klein%2C%20Size%206US.%20580k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": [
+        "Color was ambiguous; defaulted to Assorted"
+      ]
+    },
+    {
+      "slug": "calvin-klein-dress-navy-540000",
+      "brand": "Calvin Klein",
+      "styleDescriptor": "Dress",
+      "color": "Navy",
+      "priceMinor": 540000,
+      "sizes": [
+        "10US",
+        "8US"
+      ],
+      "primaryImageUrl": "/dresses/Calvin%20Klein%2C%20navy%20size%2010US.%20540k.jpeg",
+      "imageCount": 2,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "connected-apparel-floral-multi-450000",
+      "brand": "Connected Apparel",
+      "styleDescriptor": "Floral",
+      "color": "Multi",
+      "priceMinor": 450000,
+      "sizes": [
+        "20W"
+      ],
+      "primaryImageUrl": "/dresses/Connected%20apparel%2C%20multi%20floral%20size%2020W.%20450k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "dkny-dress-green-310000",
+      "brand": "DKNY",
+      "styleDescriptor": "Dress",
+      "color": "Green",
+      "priceMinor": 310000,
+      "sizes": [
+        "8US"
+      ],
+      "primaryImageUrl": "/dresses/DKNY.%20GREEN%2C%20SIZE%208US.%20310K.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "dkny-dress-orange-540000",
+      "brand": "Dkny",
+      "styleDescriptor": "Dress",
+      "color": "Orange",
+      "priceMinor": 540000,
+      "sizes": [
+        "12"
+      ],
+      "primaryImageUrl": "/dresses/Dkny%2C%20orange%20size12.%20540k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "dkny-floral-green-830000",
+      "brand": "Dkny",
+      "styleDescriptor": "Floral",
+      "color": "Green",
+      "priceMinor": 830000,
+      "sizes": [
+        "12US"
+      ],
+      "primaryImageUrl": "/dresses/Dkny%20%2Cgreen%20floral.%20Size%2012US.%20830k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "dkny-linen-blend-assorted-450000",
+      "brand": "DKNY",
+      "styleDescriptor": "Linen Blend",
+      "color": "Assorted",
+      "priceMinor": 450000,
+      "sizes": [
+        "16US"
+      ],
+      "primaryImageUrl": "/dresses/DKNY%20%2Clinen%20blend.%20%20Size%2016us%20450k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": [
+        "Color was ambiguous; defaulted to Assorted"
+      ]
+    },
+    {
+      "slug": "dkny-sequin-black-580000",
+      "brand": "DKNY",
+      "styleDescriptor": "Sequin",
+      "color": "Black",
+      "priceMinor": 580000,
+      "sizes": [
+        "6US"
+      ],
+      "primaryImageUrl": "/dresses/DKNY%2C%20BLACK%20SEQUIN%20SIZE%206US%20580K.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "donna-karan-dress-navy-gold-540000",
+      "brand": "Donna Karan",
+      "styleDescriptor": "Dress",
+      "color": "Navy Gold",
+      "priceMinor": 540000,
+      "sizes": [
+        "6US"
+      ],
+      "primaryImageUrl": "/dresses/Donna%20karan%2C%20navy%20gold%20buttons%20size%206US.%20540k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "dresse-the-population-dress-maroon-1200000",
+      "brand": "Dresse The Population",
+      "styleDescriptor": "Dress",
+      "color": "Maroon",
+      "priceMinor": 1200000,
+      "sizes": [
+        "S"
+      ],
+      "primaryImageUrl": "/dresses/Dresse%20the%20population%2C%20maroon%20size%20S%201.2M.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "eliza-sequin-gold-800000",
+      "brand": "Eliza",
+      "styleDescriptor": "Sequin",
+      "color": "Gold",
+      "priceMinor": 800000,
+      "sizes": [
+        "2US"
+      ],
+      "primaryImageUrl": "/dresses/Eliza%2Cgold%20sequins%20size%202US.%20800k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "french-connection-printed-blue-300000",
+      "brand": "French Connection",
+      "styleDescriptor": "Printed",
+      "color": "Blue",
+      "priceMinor": 300000,
+      "sizes": [
+        "M",
+        "XL"
+      ],
+      "primaryImageUrl": "/dresses/French%20connection%2C%20blue%20stripped%20sizes%20M%20and%20XL.%20%20300K.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "hush-printed-assorted-550000",
+      "brand": "Hush",
+      "styleDescriptor": "Printed",
+      "color": "Assorted",
+      "priceMinor": 550000,
+      "sizes": [
+        "M"
+      ],
+      "primaryImageUrl": "/dresses/Hush%2C%20snake%20print%20sizeM%20550k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": [
+        "Color was ambiguous; defaulted to Assorted"
+      ]
+    },
+    {
+      "slug": "karl-lagerfeld-dress-multi-colored-540000",
+      "brand": "Karl Lagerfeld",
+      "styleDescriptor": "Dress",
+      "color": "Multi Colored",
+      "priceMinor": 540000,
+      "sizes": [
+        "8US"
+      ],
+      "primaryImageUrl": "/dresses/Karl%20Lagerfeld%2C%20multi%20colored%20size%208us.%20540k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "karl-lagerfeld-dress-pink-540000",
+      "brand": "Karl Lagerfeld",
+      "styleDescriptor": "Dress",
+      "color": "Pink",
+      "priceMinor": 540000,
+      "sizes": [
+        "8US"
+      ],
+      "primaryImageUrl": "/dresses/Karl%20Lagerfeld%2C%20pink%20size%208us.%20540k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "kasper-dress-green-450000",
+      "brand": "Kasper",
+      "styleDescriptor": "Dress",
+      "color": "Green",
+      "priceMinor": 450000,
+      "sizes": [
+        "10US"
+      ],
+      "primaryImageUrl": "/dresses/Kasper%2C%20green%20size%2010US.%20450k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "kasper-dress-lime-540000",
+      "brand": "Kasper",
+      "styleDescriptor": "Dress",
+      "color": "Lime",
+      "priceMinor": 540000,
+      "sizes": [
+        "14US"
+      ],
+      "primaryImageUrl": "/dresses/Kasper%2C%20lime%20%20size%2014US.%20540k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "kasper-jacket-set-gold-650000",
+      "brand": "Kasper",
+      "styleDescriptor": "Jacket Set",
+      "color": "Gold",
+      "priceMinor": 650000,
+      "sizes": [
+        "4US"
+      ],
+      "primaryImageUrl": "/dresses/Kasper%2C%20gold%20jacket.%20Size%20%204US.%20650k.jpeg",
+      "imageCount": 2,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "tahari-dress-cream-450000",
+      "brand": "Tahari",
+      "styleDescriptor": "Dress",
+      "color": "Cream",
+      "priceMinor": 450000,
+      "sizes": [
+        "18"
+      ],
+      "primaryImageUrl": "/dresses/Tahari%2C%20cream%20size%2018.%20450k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "tommy-hilfiger-floral-navy-540000",
+      "brand": "Tommy Hilfiger",
+      "styleDescriptor": "Floral",
+      "color": "Navy",
+      "priceMinor": 540000,
+      "sizes": [
+        "12US"
+      ],
+      "primaryImageUrl": "/dresses/Tommy%20hilfiger%2C%20navy%20team%20flowers.%20Size%2012US%20%20540k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": []
+    },
+    {
+      "slug": "zara-checked-assorted-250000",
+      "brand": "Zara",
+      "styleDescriptor": "Checked",
+      "color": "Assorted",
+      "priceMinor": 250000,
+      "sizes": [
+        "S"
+      ],
+      "primaryImageUrl": "/dresses/Zara%2Cchecked%20size.%20S.%20%20250K.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": [
+        "Color was ambiguous; defaulted to Assorted"
+      ]
+    },
+    {
+      "slug": "zara-checked-assorted-500000",
+      "brand": "Zara",
+      "styleDescriptor": "Checked",
+      "color": "Assorted",
+      "priceMinor": 500000,
+      "sizes": [
+        "M"
+      ],
+      "primaryImageUrl": "/dresses/Zara%2C%20checked.%20Size%20M.%20500k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": [
+        "Color was ambiguous; defaulted to Assorted"
+      ]
+    }
+  ]
+}

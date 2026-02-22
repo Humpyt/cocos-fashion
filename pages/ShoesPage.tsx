@@ -7,13 +7,14 @@ import CategoryRoundGrid from '../components/CategoryRoundGrid';
 import { getImageByIndex } from '../imageStore';
 
 interface Props {
+  apiProducts?: Product[];
   onProductClick?: (product: Product) => void;
   onToggleWishlist?: (product: Product) => void;
   onQuickView?: (product: Product) => void;
   wishlist?: Product[];
 }
 
-const ShoesPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQuickView, wishlist = [] }) => {
+const ShoesPage: React.FC<Props> = ({ apiProducts = [], onProductClick, onToggleWishlist, onQuickView, wishlist = [] }) => {
   const categories: Category[] = [
     { id: 's1', name: 'Boots', imageUrl: getImageByIndex(51) },
     { id: 's2', name: 'Sneakers', imageUrl: getImageByIndex(52) },
@@ -29,18 +30,9 @@ const ShoesPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQuickV
     { id: 'sd3', name: 'LUXURY', label: '20% OFF', subtext: 'Designer shoes that shine.', imageUrl: getImageByIndex(59) },
   ];
 
-  const products: Product[] = Array(6).fill(null).map((_, i) => ({
-    id: `s-prod-${i}`,
-    brand: "Steve Madden",
-    name: "Women's Viable Pointed-Toe Booties",
-    price: "UGX 320,000",
-    originalPrice: "UGX 450,000",
-    discount: "(39% off)",
-    rating: 4.5,
-    reviews: 512,
-    imageUrl: getImageByIndex(i + 41),
-    badge: "Limited Time"
-  }));
+  const products = apiProducts
+    .filter((item) => item.categorySlugs?.includes('shoes'))
+    .slice(0, 6);
 
   return (
     <div className="w-full">
@@ -69,13 +61,19 @@ const ShoesPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQuickV
 
         <div className="mt-20">
           <h2 className="text-[24px] font-bold mb-8">Bestsellers</h2>
-          <ProductSlider
-            products={products}
-            onProductClick={onProductClick}
-            onToggleWishlist={onToggleWishlist}
-            onQuickView={onQuickView}
-            wishlist={wishlist}
-          />
+          {products.length ? (
+            <ProductSlider
+              products={products}
+              onProductClick={onProductClick}
+              onToggleWishlist={onToggleWishlist}
+              onQuickView={onQuickView}
+              wishlist={wishlist}
+            />
+          ) : (
+            <div className="border border-dashed border-gray-300 p-8 text-center text-sm text-gray-600">
+              No products available yet.
+            </div>
+          )}
         </div>
       </div>
     </div>

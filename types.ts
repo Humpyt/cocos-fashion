@@ -1,13 +1,19 @@
 
 export interface Product {
   id: string;
+  slug?: string;
+  variantId?: string;
   brand: string;
   name: string;
   price: string;
+  priceMinor?: number;
+  currency?: "UGX";
   originalPrice?: string;
+  originalPriceMinor?: number;
   discount?: string;
   rating: number;
   reviews: number;
+  reviewsCount?: number;
   imageUrl: string;
   badge?: string;
   isNew?: boolean;
@@ -16,6 +22,7 @@ export interface Product {
   description?: string;
   details?: string[];
   images?: string[];
+  categorySlugs?: string[];
 }
 
 export interface Category {
@@ -37,6 +44,7 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  role: 'CUSTOMER' | 'ADMIN';
   starRewardsTier: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
   points: number;
   nextTierPoints: number;

@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-serif-promo {
+  font-family: "Playfair Display", serif;
+}
+
+@layer utilities {
+  .text-cocos-orange {
+    color: #ff7d00;
+  }
+
+  .bg-cocos-orange {
+    background-color: #ff7d00;
+  }
+
+  .border-cocos-orange {
+    border-color: #ff7d00;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

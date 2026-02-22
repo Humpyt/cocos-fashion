@@ -1,14 +1,13 @@
-
 import React, { useState } from 'react';
 import HeroSlider from '../components/HeroSlider';
 import PresidentsDayHeader from '../components/PresidentsDayHeader';
 import DealCardGrid from '../components/DealCardGrid';
 import ProductSlider from '../components/ProductSlider';
-import QuickViewModal from '../components/QuickViewModal';
 import { Product, Category } from '../types';
 import { getImageByIndex } from '../imageStore';
 
 interface HomePageProps {
+  apiProducts?: Product[];
   onNavigate?: (page: string) => void;
   onProductClick?: (product: Product) => void;
   onToggleWishlist?: (product: Product) => void;
@@ -17,7 +16,7 @@ interface HomePageProps {
   wishlist?: Product[];
 }
 
-const HomePage: React.FC<HomePageProps> = ({ onProductClick, onNavigate, onToggleWishlist, onAddToBag, onQuickView, wishlist = [] }) => {
+const HomePage: React.FC<HomePageProps> = ({ apiProducts = [], onProductClick, onNavigate, onToggleWishlist, onAddToBag, onQuickView, wishlist = [] }) => {
   const [activeGiftCategory, setActiveGiftCategory] = useState('New Arrivals');
 
   const topDeals: Category[] = [
@@ -72,169 +71,8 @@ const HomePage: React.FC<HomePageProps> = ({ onProductClick, onNavigate, onToggl
     }
   ];
 
-  const giftProducts: Product[] = [
-    {
-      id: 'gift-1',
-      brand: "EFFY COLLECTION",
-      name: "Freshwater Pearl & Diamond Accent Necklace",
-      price: "UGX 549,000",
-      originalPrice: "UGX 1,650,000",
-      discount: "66% off",
-      rating: 4.8,
-      reviews: 312,
-      imageUrl: getImageByIndex(80),
-      badge: "LIMITED",
-      colors: ['#D4AF37', '#E5E4E2']
-    },
-    {
-      id: 'gift-2',
-      brand: "DYSON",
-      name: "Dyson Airwrap Multi-styler Complete Long",
-      price: "UGX 2,299,000",
-      rating: 4.5,
-      reviews: 1205,
-      imageUrl: getImageByIndex(93),
-      colors: ['#FF1493', '#C0C0C0', '#4169E1'],
-      badge: "EXCLUSIVE"
-    },
-    {
-      id: 'g1',
-      brand: "Macy's",
-      name: "Luxury Silk Blend Pajama Set",
-      price: "UGX 220,000",
-      originalPrice: "UGX 315,000",
-      discount: "(30% off)",
-      rating: 4.8,
-      reviews: 124,
-      imageUrl: getImageByIndex(1), // Stable index
-      badge: "Best Seller"
-    },
-    {
-      id: 'g2',
-      brand: "Coach",
-      name: "Small Leather Wristlet with Gold Hardware",
-      price: "UGX 295,000",
-      originalPrice: "UGX 445,000",
-      discount: "(35% off)",
-      rating: 4.9,
-      reviews: 512,
-      imageUrl: getImageByIndex(64), // Stable index
-      badge: "Limited Edition"
-    },
-    {
-      id: 'g3',
-      brand: "Swarovski",
-      name: "Crystal Pavé Heart Pendant Necklace",
-      price: "UGX 310,000",
-      originalPrice: "UGX 415,000",
-      discount: "(25% off)",
-      rating: 4.7,
-      reviews: 88,
-      imageUrl: getImageByIndex(80) // Stable index
-    }
-  ];
-
-  const trendingProducts: Product[] = [
-    {
-      id: 'trend-1',
-      brand: "Calvin Klein",
-      name: "Men's Slim Fit Stretch Dress Shirt",
-      price: "UGX 165,000",
-      originalPrice: "UGX 245,000",
-      discount: "(33% off)",
-      rating: 4.8,
-      reviews: 1540,
-      imageUrl: getImageByIndex(25),
-      badge: "Trending",
-      colors: ['#FFFFFF', '#87CEEB', '#191970']
-    },
-    {
-      id: 'trend-2',
-      brand: "Michael Kors",
-      name: "Jet Set Large Saffiano Leather Tote",
-      price: "UGX 845,000",
-      originalPrice: "UGX 1,250,000",
-      discount: "(32% off)",
-      rating: 4.9,
-      reviews: 890,
-      imageUrl: getImageByIndex(60),
-      badge: "Best Seller",
-      colors: ['#8B4513', '#000000', '#D4AF37']
-    },
-    {
-      id: 'trend-3',
-      brand: "Nike",
-      name: "Air Max 270 'Triple Black' Sneakers",
-      price: "UGX 580,000",
-      originalPrice: "UGX 720,000",
-      discount: "(19% off)",
-      rating: 4.7,
-      reviews: 2100,
-      imageUrl: getImageByIndex(52),
-      badge: "Hot Deal"
-    },
-    {
-      id: 'trend-4',
-      brand: "Swarovski",
-      name: "Attract Soul Heart Necklace",
-      price: "UGX 395,000",
-      originalPrice: "UGX 480,000",
-      discount: "(18% off)",
-      rating: 4.9,
-      reviews: 420,
-      imageUrl: getImageByIndex(85),
-      badge: "Gift Idea"
-    },
-    {
-      id: 'trend-5',
-      brand: "The North Face",
-      name: "Unisex Borealis Luxe Backpack",
-      price: "UGX 365,000",
-      originalPrice: "UGX 440,000",
-      discount: "(17% off)",
-      rating: 4.6,
-      reviews: 1205,
-      imageUrl: getImageByIndex(74), // More stable index
-      badge: "Trending",
-      colors: ['#000000', '#2F4F4F', '#8B4513']
-    },
-    {
-      id: 'trend-6',
-      brand: "Macy's",
-      name: "Women's Satin Belted Wrap Dress",
-      price: "UGX 275,000",
-      originalPrice: "UGX 390,000",
-      discount: "(30% off)",
-      rating: 4.5,
-      reviews: 312,
-      imageUrl: getImageByIndex(4), // Stable index
-      badge: "New Style"
-    },
-    {
-      id: 'trend-7',
-      brand: "Ray-Ban",
-      name: "Classic Aviator Sunglasses",
-      price: "UGX 420,000",
-      originalPrice: "UGX 550,000",
-      discount: "(24% off)",
-      rating: 4.7,
-      reviews: 856,
-      imageUrl: getImageByIndex(13),
-      badge: "Editor's Choice"
-    },
-    {
-      id: 'trend-8',
-      brand: "Coach",
-      name: "Signature Canvas Card Case",
-      price: "UGX 145,000",
-      originalPrice: "UGX 210,000",
-      discount: "(31% off)",
-      rating: 4.8,
-      reviews: 124,
-      imageUrl: getImageByIndex(62),
-      badge: "Luxe Steal"
-    }
-  ];
+  const giftProducts = apiProducts.slice(0, 5);
+  const trendingProducts = apiProducts.slice(5, 13);
 
   const giftCategories = ['Jewelry', 'Fragrance', 'Watches', 'Handbags', 'Gift sets'];
 
@@ -253,7 +91,6 @@ const HomePage: React.FC<HomePageProps> = ({ onProductClick, onNavigate, onToggl
         <HeroSlider />
       </section>
 
-      {/* Rewards Banner - Refined Design */}
       <div className="w-full max-w-[1600px] mx-auto px-4 my-10">
         <div className="bg-black text-white py-10 relative overflow-hidden px-10 md:px-16 flex flex-col md:flex-row justify-between items-center gap-8 border-l-[16px] border-cocos-orange group cursor-pointer transition-all hover:border-l-[24px]">
           <div className="absolute inset-0 opacity-15 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, #FF7D00 1.5px, transparent 1.5px)', backgroundSize: '30px 30px' }}></div>
@@ -270,7 +107,7 @@ const HomePage: React.FC<HomePageProps> = ({ onProductClick, onNavigate, onToggl
             </p>
           </div>
           <div className="flex items-center gap-4 text-2xl font-black relative z-10 whitespace-nowrap text-white group-hover:text-cocos-orange transition-colors">
-            <span className="text-3xl">★</span>
+            <span className="text-3xl">*</span>
             <span>Coco's UG Rewards</span>
           </div>
         </div>
@@ -284,7 +121,6 @@ const HomePage: React.FC<HomePageProps> = ({ onProductClick, onNavigate, onToggl
         <DealCardGrid categories={topDeals} />
       </section>
 
-      {/* New Arrivals Section - Creative Filters */}
       <section className="max-w-[1600px] mx-auto px-4 py-24 border-t border-gray-100">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-8">
           <div>
@@ -303,16 +139,19 @@ const HomePage: React.FC<HomePageProps> = ({ onProductClick, onNavigate, onToggl
             ))}
           </div>
         </div>
-        <ProductSlider
-          products={giftProducts}
-          onProductClick={onProductClick}
-          onToggleWishlist={onToggleWishlist}
-          onQuickView={onQuickView}
-          wishlist={wishlist}
-        />
+        {giftProducts.length ? (
+          <ProductSlider
+            products={giftProducts}
+            onProductClick={onProductClick}
+            onToggleWishlist={onToggleWishlist}
+            onQuickView={onQuickView}
+            wishlist={wishlist}
+          />
+        ) : (
+          <div className="border border-dashed border-gray-300 p-8 text-center text-sm text-gray-600">No products available yet.</div>
+        )}
       </section>
 
-      {/* Creative Campaign Section - THE DENIM EVENT */}
       <section className="max-w-[1600px] mx-auto px-4 py-24">
         <div className="relative h-[500px] bg-stone-100 overflow-hidden group shadow-2xl">
           <img src={getImageByIndex(24)} className="w-full h-full object-cover transition-transform duration-[10s] group-hover:scale-110" alt="The Denim Event" />
@@ -328,7 +167,6 @@ const HomePage: React.FC<HomePageProps> = ({ onProductClick, onNavigate, onToggl
             </div>
           </div>
 
-          {/* Requested Left Menu Integration per Screenshot Annotations */}
           <div className="absolute left-12 bottom-12 hidden md:block border-l-4 border-cocos-orange pl-8">
             <div className="flex flex-col gap-3 text-[12px] font-black uppercase tracking-[0.2em] text-white">
               <button onClick={() => onNavigate?.('women')} className="text-left hover:text-cocos-orange underline decoration-cocos-orange underline-offset-4">Women</button>
@@ -345,16 +183,19 @@ const HomePage: React.FC<HomePageProps> = ({ onProductClick, onNavigate, onToggl
           <h2 className="text-[36px] font-black tracking-tighter text-black uppercase">Coco's Trending Now</h2>
           <div className="h-px flex-grow bg-gray-100"></div>
         </div>
-        <ProductSlider
-          products={trendingProducts}
-          onProductClick={onProductClick}
-          onToggleWishlist={onToggleWishlist}
-          onQuickView={onQuickView}
-          wishlist={wishlist}
-        />
+        {trendingProducts.length ? (
+          <ProductSlider
+            products={trendingProducts}
+            onProductClick={onProductClick}
+            onToggleWishlist={onToggleWishlist}
+            onQuickView={onQuickView}
+            wishlist={wishlist}
+          />
+        ) : (
+          <div className="border border-dashed border-gray-300 p-8 text-center text-sm text-gray-600">No products available yet.</div>
+        )}
       </section>
 
-      {/* Massive Creative Footer CTA */}
       <div className="bg-black text-white py-40 mt-24 border-y-[16px] border-cocos-orange relative overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-full bg-cocos-orange/5 skew-x-12 translate-x-1/4"></div>
         <div className="max-w-[1600px] mx-auto px-4 text-center relative z-10">
@@ -362,7 +203,7 @@ const HomePage: React.FC<HomePageProps> = ({ onProductClick, onNavigate, onToggl
             CLEARANCE<br />
             <span className="text-cocos-orange">40-70% OFF</span>
           </h2>
-          <p className="text-[13px] md:text-[22px] font-black mb-20 uppercase tracking-[0.4em] md:tracking-[0.8em] text-gray-500">FINAL MARKDOWNS — GET IT BEFORE IT'S GONE</p>
+          <p className="text-[13px] md:text-[22px] font-black mb-20 uppercase tracking-[0.4em] md:tracking-[0.8em] text-gray-500">FINAL MARKDOWNS - GET IT BEFORE IT'S GONE</p>
           <div className="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto">
             {clearanceCategories.map(cat => (
               <button

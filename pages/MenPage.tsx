@@ -7,13 +7,14 @@ import CategoryRoundGrid from '../components/CategoryRoundGrid';
 import { getImageByIndex } from '../imageStore';
 
 interface Props {
+  apiProducts?: Product[];
   onProductClick?: (product: Product) => void;
   onToggleWishlist?: (product: Product) => void;
   onQuickView?: (product: Product) => void;
   wishlist?: Product[];
 }
 
-const MenPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQuickView, wishlist = [] }) => {
+const MenPage: React.FC<Props> = ({ apiProducts = [], onProductClick, onToggleWishlist, onQuickView, wishlist = [] }) => {
   const categories: Category[] = [
     { id: 'm1', name: 'Shirts', imageUrl: getImageByIndex(31) },
     { id: 'm2', name: 'Suits', imageUrl: getImageByIndex(32) },
@@ -29,19 +30,9 @@ const MenPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQuickVie
     { id: 'md3', name: 'ACTIVE', label: 'Starting UGX 45,000', subtext: 'Moisture-wicking essentials.', imageUrl: getImageByIndex(39) },
   ];
 
-  const products: Product[] = Array(6).fill(null).map((_, i) => ({
-    id: `m-prod-${i}`,
-    brand: "Calvin Klein",
-    name: "Men's Slim-Fit Non-Iron Stretch Shirt",
-    price: "UGX 185,000",
-    originalPrice: "UGX 295,000",
-    discount: "(37% off)",
-    rating: 4.6,
-    reviews: 840,
-    imageUrl: getImageByIndex(i + 25),
-    badge: "Limited Time",
-    colors: ['#FFFFFF', '#87CEEB', '#191970']
-  }));
+  const products = apiProducts
+    .filter((item) => item.categorySlugs?.includes('men'))
+    .slice(0, 6);
 
   return (
     <div className="w-full">
@@ -70,13 +61,19 @@ const MenPage: React.FC<Props> = ({ onProductClick, onToggleWishlist, onQuickVie
 
         <div className="mt-20">
           <h2 className="text-[24px] font-bold mb-8">Bestsellers</h2>
-          <ProductSlider
-            products={products}
-            onProductClick={onProductClick}
-            onToggleWishlist={onToggleWishlist}
-            onQuickView={onQuickView}
-            wishlist={wishlist}
-          />
+          {products.length ? (
+            <ProductSlider
+              products={products}
+              onProductClick={onProductClick}
+              onToggleWishlist={onToggleWishlist}
+              onQuickView={onQuickView}
+              wishlist={wishlist}
+            />
+          ) : (
+            <div className="border border-dashed border-gray-300 p-8 text-center text-sm text-gray-600">
+              No products available yet.
+            </div>
+          )}
         </div>
       </div>
     </div>
