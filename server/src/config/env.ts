@@ -11,13 +11,17 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   PORT: z.coerce.number().int().positive().default(4000),
   DATABASE_URL: z.string().url(),
-  CORS_ORIGIN: z.string().default("http://localhost:5173"),
+  CORS_ORIGIN: z.string().default("http://localhost:3000"),
   JWT_ACCESS_SECRET: z.string().min(16),
   JWT_REFRESH_SECRET: z.string().min(16),
   ACCESS_TOKEN_TTL_SECONDS: z.coerce.number().int().positive().default(900),
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),
   COOKIE_DOMAIN: z.string().optional(),
   COOKIE_SECURE: z
+    .enum(["true", "false"])
+    .transform((value) => value === "true")
+    .default("false"),
+  TRUST_PROXY: z
     .enum(["true", "false"])
     .transform((value) => value === "true")
     .default("false"),
@@ -36,5 +40,5 @@ const corsOrigins = parsed.data.CORS_ORIGIN.split(",")
 
 export const env = {
   ...parsed.data,
-  CORS_ORIGINS: corsOrigins.length > 0 ? corsOrigins : ["http://localhost:5173"],
+  CORS_ORIGINS: corsOrigins.length > 0 ? corsOrigins : ["http://localhost:3000"],
 };

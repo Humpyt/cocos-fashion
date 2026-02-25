@@ -59,6 +59,7 @@ const App: React.FC = () => {
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [catalogProducts, setCatalogProducts] = useState<ApiCatalogProduct[]>([]);
   const [catalogCategories, setCatalogCategories] = useState<ApiCategory[]>([]);
+  const [isCatalogLoading, setIsCatalogLoading] = useState(true);
 
   const catalogProductsForUi = useMemo<Product[]>(() => {
     return catalogProducts.map((item) => {
@@ -95,6 +96,29 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const restoreSession = async () => {
+      const existingToken = tokenStore.getAccessToken();
+      const hasSessionHint = tokenStore.hasSessionHint();
+
+      if (!existingToken && !hasSessionHint) {
+        return;
+      }
+
+      const shouldTryRefresh = hasSessionHint || Boolean(existingToken);
+
+      if (existingToken) {
+        try {
+          const me = await authApi.me(existingToken);
+          setUser(me);
+          return;
+        } catch {
+          tokenStore.clearAccessToken();
+        }
+      }
+
+      if (!shouldTryRefresh) {
+        return;
+      }
+
       try {
         const refreshed = await authApi.refresh();
         tokenStore.setAccessToken(refreshed.accessToken);
@@ -109,6 +133,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const loadCatalog = async () => {
+      setIsCatalogLoading(true);
       const [productsResult, categoriesResult] = await Promise.allSettled([
         catalogApi.listProducts({ page: 1, limit: 100 }),
         catalogApi.listCategories(),
@@ -121,6 +146,8 @@ const App: React.FC = () => {
       if (categoriesResult.status === 'fulfilled') {
         setCatalogCategories(categoriesResult.value);
       }
+
+      setIsCatalogLoading(false);
     };
     void loadCatalog();
   }, []);
@@ -312,7 +339,18 @@ const App: React.FC = () => {
           />
         );
       case 'women':
-        return <WomenPage apiProducts={catalogProductsForUi} apiCategories={catalogCategories} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onQuickView={setQuickViewProduct} wishlist={wishlist} />;
+        return (
+          <WomenPage
+            apiProducts={catalogProductsForUi}
+            apiCategories={catalogCategories}
+            isCatalogLoading={isCatalogLoading}
+            onProductClick={handleProductClick}
+            onToggleWishlist={toggleWishlist}
+            onQuickView={setQuickViewProduct}
+            onAddToBag={addToCart}
+            wishlist={wishlist}
+          />
+        );
       case 'men':
         return <MenPage apiProducts={catalogProductsForUi} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onQuickView={setQuickViewProduct} wishlist={wishlist} />;
       case 'shoes':

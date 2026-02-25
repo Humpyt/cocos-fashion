@@ -14,6 +14,7 @@ maybeDescribe("dress import integration", () => {
     await writeFile(join(sourceDir, "Kasper, gold jacket. Size  4US. 650k.jpeg"), "");
     await writeFile(join(sourceDir, "Kasper, gold jacket. Size  6US. 650k back.jpeg"), "");
     await writeFile(join(sourceDir, "Dkny ,green floral. Size 12US. 830k.jpeg"), "");
+    await writeFile(join(sourceDir, "Zara,checked size. S.  250K.jpeg"), "");
 
     await prisma.orderItem.deleteMany();
     await prisma.payment.deleteMany();
@@ -41,13 +42,15 @@ maybeDescribe("dress import integration", () => {
       dryRun: false,
     });
 
-    expect(firstRun.summary.createdProducts).toBe(2);
-    expect(firstRun.summary.createdVariants).toBeGreaterThanOrEqual(3);
+    expect(firstRun.summary.createdProducts).toBe(3);
+    expect(firstRun.summary.createdVariants).toBeGreaterThanOrEqual(4);
 
     const dressesCategory = await prisma.category.findUnique({ where: { slug: "dresses" } });
     const womenCategory = await prisma.category.findUnique({ where: { slug: "women" } });
+    const waistcoatsCategory = await prisma.category.findUnique({ where: { slug: "waistcoats" } });
     expect(dressesCategory).toBeTruthy();
     expect(womenCategory).toBeTruthy();
+    expect(waistcoatsCategory).toBeTruthy();
 
     const groupedProduct = await prisma.product.findFirst({
       where: {
@@ -64,11 +67,27 @@ maybeDescribe("dress import integration", () => {
     expect(groupedProduct?.variants.map((variant) => variant.size).sort()).toEqual(["4US", "6US"]);
     expect(groupedProduct?.categoryLinks.length).toBeGreaterThanOrEqual(2);
 
+    const waistcoatProduct = await prisma.product.findUnique({
+      where: { slug: "zara-checked-assorted-250000" },
+      include: {
+        categoryLinks: {
+          include: {
+            category: true,
+          },
+        },
+      },
+    });
+    expect(waistcoatProduct).toBeTruthy();
+    const waistcoatCategorySlugs = (waistcoatProduct?.categoryLinks ?? [])
+      .map((categoryLink) => categoryLink.category.slug)
+      .sort();
+    expect(waistcoatCategorySlugs).toEqual(["waistcoats", "women"]);
+
     const secondRun = await runDressImport({
       sourceDir,
       dryRun: false,
     });
     expect(secondRun.summary.createdProducts).toBe(0);
-    expect(secondRun.summary.updatedProducts).toBe(2);
+    expect(secondRun.summary.updatedProducts).toBe(3);
   });
 });

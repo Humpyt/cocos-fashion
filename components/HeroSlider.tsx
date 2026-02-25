@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getImageByIndex } from '../imageStore';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
+
+const sliderImages = [
+  '/slders/bg.jpg',
+  '/slders/bg01.jpg',
+  '/slders/bg01%20(1).jpg',
+  '/slders/women.jpg',
+];
 
 const slides = [
   {
@@ -8,7 +14,7 @@ const slides = [
     title: "Spring starts with Coco's",
     subtitle: "SPRING '25 PREVIEW",
     description: "Fresh palettes, airy fits & timeless staples. Unlock early access for members.",
-    image: getImageByIndex(18),
+    image: sliderImages[0],
     ctaPrimary: "Shop Women",
     ctaSecondary: "Shop Men",
     productBadge: { name: "SILKY SATIN SLIP DRESS", price: "UGX 330,000", tag: "NEW ARRIVAL" }
@@ -18,7 +24,7 @@ const slides = [
     title: "The Denim Event",
     subtitle: "UP TO 40% OFF",
     description: "Find your perfect fit. From high-rise skinnies to refined flares.",
-    image: getImageByIndex(19),
+    image: sliderImages[1],
     ctaPrimary: "Shop Denim",
     ctaSecondary: "Style Guide",
     productBadge: { name: "ULTRA-WIDE LEG JEANS", price: "UGX 185,000", tag: "TRENDING" }
@@ -28,7 +34,7 @@ const slides = [
     title: "The Accessories Edit",
     subtitle: "PURE ELEGANCE",
     description: "Complete your look with our curated selection of designer handbags and luxury jewelry.",
-    image: getImageByIndex(70),
+    image: sliderImages[2],
     ctaPrimary: "Shop Bags",
     ctaSecondary: "View Jewelry",
     productBadge: { name: "QUILTED LEATHER TOTE", price: "UGX 1,450,000", tag: "EXCLUSIVE" }
@@ -38,7 +44,7 @@ const slides = [
     title: "Elevated Masculinity",
     subtitle: "REFINED STYLE",
     description: "Sharp tailoring meets contemporary comfort. Explore the new standard for the modern man.",
-    image: getImageByIndex(21),
+    image: sliderImages[3],
     ctaPrimary: "Shop Men",
     ctaSecondary: "New Arrivals",
     productBadge: { name: "ITALIAN WOOL BLAZER", price: "UGX 850,000", tag: "PREMIUM" }

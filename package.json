@@ -6,11 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:all": "npm run build && npm --prefix server run build",
     "preview": "vite preview",
     "dev:server": "npm --prefix server run dev",
     "build:server": "npm --prefix server run build",
     "test:server": "npm --prefix server run test",
     "import:dresses": "npm --prefix server run catalog:import:dresses --",
+    "import:ladies-shoes": "npm --prefix server run catalog:import:ladies-shoes --",
     "check:images": "node scripts/validate-images.mjs"
   },
   "dependencies": {

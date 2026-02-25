@@ -25,11 +25,16 @@ const authRateLimit = rateLimit({
 });
 
 export const app = express();
+if (env.TRUST_PROXY) {
+  app.set("trust proxy", 1);
+}
 const allowedOrigins = new Set(env.CORS_ORIGINS);
 const devLocalOriginPattern = /^http:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?$/;
 const currentDir = dirname(fileURLToPath(import.meta.url));
 const blousesDir = resolve(currentDir, "../../public/blouses");
 const dressesDir = resolve(currentDir, "../../public/dresses");
+const waistcoatsDir = resolve(currentDir, "../../public/waist-coats");
+const ladiesShoesDir = resolve(currentDir, "../../public/Ladies Shoes");
 
 app.use(
   pinoHttp({
@@ -72,6 +77,8 @@ app.use(cookieParser());
 app.use(authMiddleware);
 app.use("/blouses", express.static(blousesDir));
 app.use("/dresses", express.static(dressesDir));
+app.use("/waist-coats", express.static(waistcoatsDir));
+app.use("/ladies-shoes", express.static(ladiesShoesDir));
 
 app.get("/health", (_req, res) => {
   return res.status(200).json({

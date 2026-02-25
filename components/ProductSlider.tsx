@@ -8,10 +8,20 @@ interface Props {
   onProductClick?: (product: Product) => void;
   onToggleWishlist?: (product: Product) => void;
   onQuickView?: (product: Product) => void;
+  onAddToBag?: (product: Product, quantity: number, size?: string, color?: string) => void;
   wishlist?: Product[];
 }
 
-const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWishlist, onQuickView, wishlist = [] }) => {
+const FALLBACK_PRODUCT_IMAGE = '/women.jpg';
+
+const ProductSlider: React.FC<Props> = ({
+  products,
+  onProductClick,
+  onToggleWishlist,
+  onQuickView,
+  onAddToBag,
+  wishlist = [],
+}) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
@@ -54,21 +64,41 @@ const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWish
             key={product.id}
             className="min-w-[260px] md:min-w-[320px] snap-start bg-white cursor-pointer group/item flex flex-col"
             onClick={() => onProductClick?.(product)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                onProductClick?.(product);
+              }
+            }}
+            aria-label={`Open product details for ${product.name}`}
           >
             {/* Visual Container */}
             <div className="relative aspect-[4/5] overflow-hidden bg-[#F8F8F8] rounded-none mb-6">
               <img
                 src={product.imageUrl}
                 alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/item:scale-110"
+                loading="lazy"
+                decoding="async"
+                onError={(event) => {
+                  const target = event.currentTarget;
+                  if (target.dataset.fallbackApplied === '1') {
+                    return;
+                  }
+                  target.dataset.fallbackApplied = '1';
+                  target.src = FALLBACK_PRODUCT_IMAGE;
+                }}
+                className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/item:scale-110 motion-reduce:transform-none motion-reduce:transition-none"
               />
 
               {/* Interaction Overlay */}
-              <div className="absolute inset-0 bg-black/5 opacity-0 group-hover/item:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute inset-0 bg-black/5 opacity-0 group-hover/item:opacity-100 transition-opacity duration-500 motion-reduce:transition-none"></div>
 
               {/* Action Buttons */}
-              <div className="absolute top-5 right-5 flex flex-col gap-3 translate-x-12 opacity-0 group-hover/item:translate-x-0 group-hover/item:opacity-100 transition-all duration-500">
+              <div className="absolute top-5 right-5 z-10 flex flex-col gap-3 translate-x-0 opacity-100 md:translate-x-12 md:opacity-0 md:group-hover/item:translate-x-0 md:group-hover/item:opacity-100 transition-all duration-500 motion-reduce:transition-none">
                 <button
+                  aria-label={`Toggle wishlist for ${product.name}`}
                   className={`w-11 h-11 bg-white rounded-full flex items-center justify-center shadow-2xl transition-all transform hover:scale-110 ${isInWishlist(product.id) ? 'text-cocos-orange' : 'text-black hover:text-cocos-orange'}`}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -78,6 +108,7 @@ const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWish
                   <Heart size={20} fill={isInWishlist(product.id) ? "currentColor" : "none"} />
                 </button>
                 <button
+                  aria-label={`Quick view ${product.name}`}
                   className="w-11 h-11 bg-white rounded-full flex items-center justify-center shadow-2xl hover:bg-cocos-orange hover:text-white transition-all transform hover:scale-110"
                   onClick={(e) => {
                     e.stopPropagation();
@@ -100,8 +131,23 @@ const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWish
               )}
 
               {/* Quick Add Bar */}
-              <div className="absolute inset-x-0 bottom-0 translate-y-full group-hover/item:translate-y-0 transition-transform duration-300 bg-black p-4 flex justify-center">
-                <button className="flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-[0.3em] hover:text-cocos-orange transition-colors">
+              <div className="absolute inset-x-0 bottom-0 translate-y-0 md:translate-y-full md:group-hover/item:translate-y-0 transition-transform duration-300 bg-black/95 md:bg-black p-4 flex justify-center motion-reduce:transition-none">
+                <button
+                  aria-label={`Quick add ${product.name}`}
+                  className="flex items-center gap-2 text-white text-[10px] font-black uppercase tracking-[0.3em] hover:text-cocos-orange transition-colors"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    if (product.variantId && onAddToBag) {
+                      onAddToBag(product, 1);
+                      return;
+                    }
+                    if (onQuickView) {
+                      onQuickView(product);
+                      return;
+                    }
+                    onProductClick?.(product);
+                  }}
+                >
                   <ShoppingBag size={14} /> Quick Add
                 </button>
               </div>
@@ -170,6 +216,7 @@ const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWish
       {showLeft && (
         <button
           onClick={() => scroll('left')}
+          aria-label="Scroll products left"
           className="absolute -left-8 top-[38%] -translate-y-1/2 bg-white w-16 h-16 rounded-full shadow-2xl border border-gray-100 flex items-center justify-center z-20 hover:scale-110 hover:bg-cocos-orange hover:text-white transition-all duration-500 group/nav"
         >
           <ChevronLeft size={32} className="transition-transform group-hover/nav:-translate-x-1" />
@@ -178,6 +225,7 @@ const ProductSlider: React.FC<Props> = ({ products, onProductClick, onToggleWish
       {showRight && (
         <button
           onClick={() => scroll('right')}
+          aria-label="Scroll products right"
           className="absolute -right-8 top-[38%] -translate-y-1/2 bg-white w-16 h-16 rounded-full shadow-2xl border border-gray-100 flex items-center justify-center z-20 hover:scale-110 hover:bg-cocos-orange hover:text-white transition-all duration-500 group/nav"
         >
           <ChevronRight size={32} className="transition-transform group-hover/nav:translate-x-1" />

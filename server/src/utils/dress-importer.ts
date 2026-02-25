@@ -21,9 +21,12 @@ type ExistingProductSnapshot = {
   variants: Array<{ id: string; sku: string }>;
 };
 
+type DressImportManagedCategorySlug = "women" | "dresses" | "waistcoats";
+
 type CategoryRefs = {
   dressesCategoryId: string;
   womenCategoryId: string;
+  waistcoatsCategoryId: string;
 };
 
 export type DressImportSummary = {
@@ -65,6 +68,7 @@ export type DressImportReport = {
 
 const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp"]);
 const DEFAULT_STOCK_QTY = 100;
+const WAISTCOAT_OVERRIDE_FILENAME = "zara,checked size. s.  250k.jpeg";
 
 const hasImageExtension = (filename: string): boolean => {
   const extension = filename.slice(filename.lastIndexOf(".")).toLowerCase();
@@ -86,6 +90,16 @@ const computeRating = (groupSlug: string): number => {
 
 const computeReviewsCount = (groupSlug: string): number => 24 + (hashText(groupSlug) % 240);
 
+const normalizeOverrideFilename = (filename: string): string => filename.trim().toLowerCase();
+
+export const resolveDressImportCategorySlugs = (group: DressImportGroup): DressImportManagedCategorySlug[] => {
+  const normalizedSourceFilenames = group.sourceFilenames.map(normalizeOverrideFilename);
+  if (normalizedSourceFilenames.includes(WAISTCOAT_OVERRIDE_FILENAME)) {
+    return ["women", "waistcoats"];
+  }
+  return ["women", "dresses"];
+};
+
 const ensureCategories = async (): Promise<CategoryRefs> => {
   const dresses = await prisma.category.upsert({
     where: { slug: "dresses" },
@@ -99,9 +113,16 @@ const ensureCategories = async (): Promise<CategoryRefs> => {
     update: { name: "Women" },
   });
 
+  const waistcoats = await prisma.category.upsert({
+    where: { slug: "waistcoats" },
+    create: { slug: "waistcoats", name: "Waistcoats" },
+    update: { name: "Waistcoats" },
+  });
+
   return {
     dressesCategoryId: dresses.id,
     womenCategoryId: women.id,
+    waistcoatsCategoryId: waistcoats.id,
   };
 };
 
@@ -159,6 +180,13 @@ const applyGroup = async (
   const rating = computeRating(group.slug);
   const reviewsCount = computeReviewsCount(group.slug);
   const sizes = uniqueSizes(group);
+  const categoryIdBySlug: Record<DressImportManagedCategorySlug, string> = {
+    women: categories.womenCategoryId,
+    dresses: categories.dressesCategoryId,
+    waistcoats: categories.waistcoatsCategoryId,
+  };
+  const managedCategoryIds = Object.values(categoryIdBySlug);
+  const targetCategoryIds = resolveDressImportCategorySlugs(group).map((slug) => categoryIdBySlug[slug]);
 
   const result = await prisma.$transaction(async (tx) => {
     const product = existing
@@ -206,11 +234,20 @@ const applyGroup = async (
           },
         });
 
+    await tx.productCategory.deleteMany({
+      where: {
+        productId: product.id,
+        categoryId: {
+          in: managedCategoryIds,
+        },
+      },
+    });
+
     await tx.productCategory.createMany({
-      data: [
-        { productId: product.id, categoryId: categories.dressesCategoryId },
-        { productId: product.id, categoryId: categories.womenCategoryId },
-      ],
+      data: targetCategoryIds.map((categoryId) => ({
+        productId: product.id,
+        categoryId,
+      })),
       skipDuplicates: true,
     });
 

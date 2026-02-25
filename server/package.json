@@ -12,6 +12,8 @@
     "prisma:deploy": "prisma migrate deploy",
     "prisma:seed": "tsx prisma/seed.ts",
     "catalog:import:dresses": "tsx scripts/import-dresses.ts",
+    "catalog:import:ladies-shoes": "tsx scripts/import-ladies-shoes.ts",
+    "catalog:backfill:blouses": "tsx scripts/backfill-blouses-category.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

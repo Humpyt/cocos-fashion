@@ -8,6 +8,7 @@ interface Props {
 }
 
 const DealCardGrid: React.FC<Props> = ({ categories }) => {
+  const fallbackImage = '/women.jpg';
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
@@ -72,7 +73,17 @@ const DealCardGrid: React.FC<Props> = ({ categories }) => {
             <img
               src={cat.imageUrl}
               alt={cat.name}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110"
+              loading="lazy"
+              decoding="async"
+              onError={(event) => {
+                const target = event.currentTarget;
+                if (target.dataset.fallbackApplied === '1') {
+                  return;
+                }
+                target.dataset.fallbackApplied = '1';
+                target.src = fallbackImage;
+              }}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110 motion-reduce:transform-none motion-reduce:transition-none"
             />
 
             {/* Dark Gradient Bottom Overlay */}

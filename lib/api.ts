@@ -1,8 +1,11 @@
 import { User } from "../types";
 
-const API_BASE_URL = (import.meta as any).env?.VITE_API_BASE_URL ?? "http://localhost:4000";
+const API_BASE_URL =
+  (import.meta as any).env?.VITE_API_BASE_URL ??
+  ((import.meta as any).env?.PROD ? "" : "http://localhost:4000");
 const ACCESS_TOKEN_KEY = "cocos_access_token";
 const GUEST_ID_KEY = "cocos_guest_id";
+const SESSION_HINT_KEY = "cocos_session_hint";
 
 export const resolveMediaUrl = (url?: string | null): string => {
   if (!url) return "";
@@ -218,9 +221,14 @@ export const tokenStore = {
   },
   setAccessToken(token: string) {
     localStorage.setItem(ACCESS_TOKEN_KEY, token);
+    localStorage.setItem(SESSION_HINT_KEY, "1");
   },
   clearAccessToken() {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
+    localStorage.removeItem(SESSION_HINT_KEY);
+  },
+  hasSessionHint() {
+    return localStorage.getItem(SESSION_HINT_KEY) === "1";
   },
   getOrCreateGuestId() {
     const existing = localStorage.getItem(GUEST_ID_KEY);

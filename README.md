@@ -2,52 +2,67 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# Run and deploy your AI Studio app
+# Coco's Fashion - Local Setup
 
-This contains everything you need to run your app locally.
+This repo contains the frontend (`vite + react`) and backend API (`express + prisma + postgres`).
 
-View your app in AI Studio: https://ai.studio/apps/drive/13z8kFU0e8ZmD0i39EZy4whtJAUg1YjcF
+## Prerequisites
 
-## Run Locally
+- Node.js
+- Docker Desktop
 
-**Prerequisites:**  Node.js
-
+## Run Locally (Supabase + Prisma)
 
 1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+   - `npm install`
+   - `npm --prefix server install`
+2. Start local Supabase (first run pulls images):
+   - `npx supabase start`
+3. Create backend env file:
+   - Copy `server/.env.example` to `server/.env`
+4. Prepare Prisma client/schema:
+   - `npm --prefix server run prisma:generate`
+   - `npm --prefix server run prisma:deploy`
+5. Optional seed data:
+   - `npm --prefix server run prisma:seed`
+6. Start the app:
+   - Frontend: `npm run dev`
+   - Backend: `npm run dev:server`
 
-## Backend API (PostgreSQL + Prisma + Express)
+Frontend: `http://localhost:3000`  
+Backend: `http://localhost:4000`
 
-The repo now includes a backend in `server/`.
+## Notes
 
-### Backend setup
+- Default local Supabase DB URL:
+  - `postgresql://postgres:postgres@127.0.0.1:54322/postgres`
+- Frontend API base can be overridden with `VITE_API_BASE_URL`.
+  - Dev default: `http://localhost:4000`
+  - Production default: same-origin (empty base URL)
+- In `development`, backend allows `localhost` / `127.0.0.1` origins on any port.
 
-1. Copy `server/.env.example` to `server/.env` and update values.
-2. Ensure PostgreSQL is running.
-3. Install backend deps:
-   `cd server && npm install`
-4. Generate Prisma client and run migrations:
-   `npm run prisma:generate`
-   `npm run prisma:migrate`
-5. Seed starter catalog data:
-   `npm run prisma:seed`
-6. Start backend:
-   `npm run dev`
-7. CORS behavior:
-   In `development`, frontend requests from `http://localhost:<any-port>` and `http://127.0.0.1:<any-port>` are allowed automatically.
-   In `test`/`production`, only origins listed in `CORS_ORIGIN` are allowed.
-
-### Admin access (local seed)
+## Admin Access (Seeded)
 
 - Email: `admin@cocos.local`
 - Password: `Admin123!@#`
-- Admin UI route in app: `admin`
+- Admin route: `admin`
 
-From repo root:
+## Stop Local Supabase
 
-- Start frontend: `npm run dev`
-- Start backend: `npm run dev:server`
-- Optional frontend API base override: set `VITE_API_BASE_URL` (default is `http://localhost:4000`)
+- `npx supabase stop --no-backup`
+
+## Production (Hostinger VPS)
+
+Production deployment files for `cocofashionbrands.com` are included:
+
+- Nginx config:
+  - `deploy/hostinger/nginx/cocofashionbrands.com.conf`
+- PM2 process config:
+  - `deploy/hostinger/pm2/ecosystem.config.cjs`
+- Backend production env template:
+  - `server/.env.production.example`
+- Full VPS steps:
+  - `deploy/hostinger/README.md`
+
+Frontend production env (optional):
+- `.env.production.example`

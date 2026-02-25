@@ -22,6 +22,7 @@ const slugify = (value: string): string =>
 
 const categorySeeds = [
   { slug: "women", name: "Women" },
+  { slug: "blouses", name: "Blouses" },
   { slug: "men", name: "Men" },
   { slug: "shoes", name: "Shoes" },
   { slug: "handbags", name: "Handbags" },
@@ -31,6 +32,7 @@ const categorySeeds = [
   { slug: "home", name: "Home" },
   { slug: "activewear", name: "Activewear" },
   { slug: "gifts", name: "Gift Sets" },
+  { slug: "waistcoats", name: "Waistcoats" },
 ];
 
 type BlouseSeed = {
@@ -116,11 +118,22 @@ const run = async () => {
     if (!womenCategoryId) {
       throw new Error("Women category missing during seed");
     }
-    await prisma.productCategory.create({
-      data: {
-        categoryId: womenCategoryId,
-        productId: product.id,
-      },
+    const blousesCategoryId = categoryBySlug.get("blouses");
+    if (!blousesCategoryId) {
+      throw new Error("Blouses category missing during seed");
+    }
+    await prisma.productCategory.createMany({
+      data: [
+        {
+          categoryId: womenCategoryId,
+          productId: product.id,
+        },
+        {
+          categoryId: blousesCategoryId,
+          productId: product.id,
+        },
+      ],
+      skipDuplicates: true,
     });
   }
 
