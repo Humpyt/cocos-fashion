@@ -1,8 +1,29 @@
 import { User } from "../types";
 
-const API_BASE_URL =
-  (import.meta as any).env?.VITE_API_BASE_URL ??
-  ((import.meta as any).env?.PROD ? "" : "http://localhost:4000");
+const rawApiBaseUrl = ((import.meta as any).env?.VITE_API_BASE_URL as string | undefined)?.trim();
+const isProd = Boolean((import.meta as any).env?.PROD);
+const isLoopbackApiBase = (value?: string): boolean => {
+  if (!value) {
+    return false;
+  }
+  try {
+    const parsed = new URL(value);
+    return parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1" || parsed.hostname === "::1";
+  } catch {
+    return false;
+  }
+};
+
+const API_BASE_URL = (() => {
+  if (isProd) {
+    // Never ship production requests to loopback; fall back to same-origin.
+    if (!rawApiBaseUrl || isLoopbackApiBase(rawApiBaseUrl)) {
+      return "";
+    }
+    return rawApiBaseUrl;
+  }
+  return rawApiBaseUrl ?? "http://localhost:4000";
+})();
 const ACCESS_TOKEN_KEY = "cocos_access_token";
 const GUEST_ID_KEY = "cocos_guest_id";
 const SESSION_HINT_KEY = "cocos_session_hint";
