@@ -103,7 +103,7 @@ const App: React.FC = () => {
         return;
       }
 
-      const shouldTryRefresh = hasSessionHint || Boolean(existingToken);
+      const shouldTryRefresh = hasSessionHint;
 
       if (existingToken) {
         try {
