@@ -23,13 +23,13 @@ jobs:
       DEPLOY_REF: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.ref || github.ref_name }}
     steps:
       - name: Run deployment over SSH
-        uses: appleboy/ssh-action@v1.2.2
+        uses: nick-fields/private-action@v2.8.0
         with:
           host: ${{ secrets.VPS_HOST }}
           port: ${{ secrets.VPS_PORT }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
-          script_stop: true
+          debug: true
           script: |
             set -euo pipefail
             bash /var/www/cocofashionbrands.com/current/deploy/hostinger/deploy.sh "${{ github.event_name == 'workflow_dispatch' && github.event.inputs.ref || github.ref_name }}"
