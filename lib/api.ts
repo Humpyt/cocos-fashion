@@ -265,6 +265,7 @@ export const tokenStore = {
 type AuthResponse = {
   accessToken: string;
   user: User;
+  isNew?: boolean;
 };
 
 export const authApi = {
@@ -295,6 +296,10 @@ export const authApi = {
   },
   async me(token: string) {
     return request<User>("/v1/auth/me", { token });
+  },
+  googleAuth() {
+    // Redirect to Google OAuth endpoint
+    window.location.href = `${API_BASE_URL}/v1/auth/google`;
   },
 };
 

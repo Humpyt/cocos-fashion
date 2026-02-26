@@ -46,6 +46,7 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  avatarUrl?: string;
   role: 'CUSTOMER' | 'ADMIN';
   starRewardsTier: 'Bronze' | 'Silver' | 'Gold' | 'Platinum';
   points: number;

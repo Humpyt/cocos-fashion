@@ -1,6 +1,8 @@
 import { Router } from "express";
+import { randomBytes } from "node:crypto";
 import { asyncHandler } from "../../utils/async-handler.js";
 import { requireAuth } from "../../middleware/require-auth.js";
+import { env } from "../../config/env.js";
 import { loginSchema, refreshSchema, registerSchema } from "./auth.schemas.js";
 import {
   getMe,
@@ -11,6 +13,7 @@ import {
   refreshSession,
   registerUser,
 } from "./auth.service.js";
+import { getGoogleAuthUrl, googleAuthCallback } from "../../services/oauth.service.js";
 
 export const authRouter = Router();
 
@@ -91,5 +94,61 @@ authRouter.get(
   asyncHandler(async (req, res) => {
     const user = await getMe(req.auth!.userId);
     return res.status(200).json(user);
+  }),
+);
+
+// Google OAuth routes
+authRouter.get(
+  "/google",
+  asyncHandler(async (req, res) => {
+    const state = randomBytes(16).toString("base64");
+    const authUrl = getGoogleAuthUrl(state);
+
+    // Store state in cookie for CSRF protection
+    res.cookie("oauth_state", state, {
+      httpOnly: true,
+      secure: env.COOKIE_SECURE,
+      sameSite: "lax",
+      maxAge: 600000, // 10 minutes
+    });
+
+    return res.redirect(302, authUrl);
+  }),
+);
+
+authRouter.get(
+  "/google/callback",
+  asyncHandler(async (req, res) => {
+    const { code, state } = req.query;
+    const storedState = req.cookies.oauth_state;
+
+    // Validate state for CSRF protection
+    if (!state || !storedState || state !== storedState) {
+      return res.status(400).json({ message: "Invalid OAuth state" });
+    }
+
+    // Clear state cookie
+    res.clearCookie("oauth_state", {
+      httpOnly: true,
+      secure: env.COOKIE_SECURE,
+      sameSite: "lax",
+    });
+
+    if (!code || typeof code !== "string") {
+      return res.status(400).json({ message: "Missing authorization code" });
+    }
+
+    const result = await googleAuthCallback(
+      code,
+      req.ip,
+      req.headers["user-agent"],
+    );
+
+    // Set refresh token cookie
+    res.cookie(REFRESH_COOKIE_NAME, result.refreshToken, getRefreshCookieOptions());
+
+    // Redirect to frontend with success
+    const redirectUrl = `${env.FRONTEND_URL}/auth?success=true`;
+    return res.redirect(302, redirectUrl);
   }),
 );

@@ -15,7 +15,7 @@ const normalizeEmail = (value: string): string => value.trim().toLowerCase();
 const enumToTitle = (value: string): string =>
   value.slice(0, 1).toUpperCase() + value.slice(1).toLowerCase();
 
-const toUserResponse = (user: {
+export const toUserResponse = (user: {
   id: string;
   email: string;
   firstName: string;
@@ -24,6 +24,7 @@ const toUserResponse = (user: {
   rewardTier: string;
   rewardPoints: number;
   nextTierPoints: number;
+  avatarUrl?: string | null;
 }) => ({
   id: user.id,
   email: user.email,
@@ -33,9 +34,10 @@ const toUserResponse = (user: {
   starRewardsTier: enumToTitle(user.rewardTier),
   points: user.rewardPoints,
   nextTierPoints: user.nextTierPoints,
+  avatarUrl: user.avatarUrl ?? undefined,
 });
 
-const signAccessToken = async (user: { id: string; email: string; role: "CUSTOMER" | "ADMIN" }): Promise<string> => {
+export const signAccessToken = async (user: { id: string; email: string; role: "CUSTOMER" | "ADMIN" }): Promise<string> => {
   return new SignJWT({ email: user.email, role: user.role })
     .setProtectedHeader({ alg: "HS256" })
     .setSubject(user.id)
@@ -53,7 +55,7 @@ const signRefreshTokenJwt = async (tokenId: string, userId: string): Promise<str
     .sign(refreshSecret);
 };
 
-const createRefreshTokenRecord = async (params: {
+export const createRefreshTokenRecord = async (params: {
   userId: string;
   ipAddress?: string;
   userAgent?: string;
@@ -162,7 +164,11 @@ export const loginUser = async (input: {
   }
   const user = userMaybe!;
 
-  const validPassword = await argon2.verify(user.passwordHash, input.password);
+  if (!user.passwordHash) {
+    unauthorized("This account uses OAuth. Please sign in with Google.");
+  }
+
+  const validPassword = await argon2.verify(user.passwordHash!, input.password);
   if (!validPassword) {
     unauthorized("Invalid email or password");
   }

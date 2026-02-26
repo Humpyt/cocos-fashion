@@ -25,6 +25,10 @@ const envSchema = z.object({
     .enum(["true", "false"])
     .transform((value) => value === "true")
     .default("false"),
+  GOOGLE_CLIENT_ID: z.string().optional(),
+  GOOGLE_CLIENT_SECRET: z.string().optional(),
+  GOOGLE_CALLBACK_URL: z.string().url().optional(),
+  FRONTEND_URL: z.string().url().default("http://localhost:3000"),
 });
 
 const parsed = envSchema.safeParse(process.env);

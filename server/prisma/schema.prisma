@@ -49,9 +49,16 @@ enum PaymentStatus {
 model User {
   id             String       @id @default(uuid())
   email          String       @unique
-  passwordHash   String
+  passwordHash   String?
   firstName      String
   lastName       String
+  avatarUrl      String?
+
+  // OAuth fields
+  provider       String?
+  providerId     String?
+  providerData   Json?
+
   role           UserRole     @default(CUSTOMER)
   rewardTier     RewardTier   @default(BRONZE)
   rewardPoints   Int          @default(0)
@@ -64,6 +71,8 @@ model User {
   carts         Cart[]
   wishlistItems WishlistItem[]
   orders        Order[]
+
+  @@index([provider, providerId])
 }
 
 model RefreshToken {
