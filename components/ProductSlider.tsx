@@ -89,7 +89,7 @@ const ProductSlider: React.FC<Props> = ({
                   target.dataset.fallbackApplied = '1';
                   target.src = FALLBACK_PRODUCT_IMAGE;
                 }}
-                className="w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/item:scale-110 motion-reduce:transform-none motion-reduce:transition-none"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover/item:scale-110 motion-reduce:transform-none motion-reduce:transition-none"
               />
 
               {/* Interaction Overlay */}
@@ -175,17 +175,6 @@ const ProductSlider: React.FC<Props> = ({
                 {product.discount && (
                   <span className="text-cocos-orange text-[12px] font-black uppercase tracking-widest">{product.discount}</span>
                 )}
-              </div>
-
-              {/* Star Rewards Interactive Bar */}
-              <div className="mt-auto border-t border-gray-100 pt-5 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></div>
-                  <p className="text-[11px] font-bold text-[#0046BE] uppercase tracking-wider">
-                    UGX 40,000 Rewards
-                  </p>
-                </div>
-                <span className="text-[11px] text-gray-400 font-bold">({product.reviews})</span>
               </div>
 
               {/* Color Swatches Grid */}

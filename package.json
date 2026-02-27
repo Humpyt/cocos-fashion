@@ -13,6 +13,7 @@
     "test:server": "npm --prefix server run test",
     "import:dresses": "npm --prefix server run catalog:import:dresses --",
     "import:ladies-shoes": "npm --prefix server run catalog:import:ladies-shoes --",
+    "import:men": "npm --prefix server run catalog:import:men --",
     "check:images": "node scripts/validate-images.mjs"
   },
   "dependencies": {

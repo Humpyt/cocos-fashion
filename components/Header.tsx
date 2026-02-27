@@ -21,11 +21,13 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, cartCount = 0,
     { id: 'women', label: 'Women' },
     { id: 'men', label: 'Men' },
     { id: 'shoes', label: 'Shoes' },
-    { id: 'handbags', label: 'Handbags' },
-    { id: 'gifts', label: 'Gifts' },
-    { id: 'now', label: 'Now & Trending' },
-    { id: 'sale', label: 'Sale', isOrange: true }
+    { id: 'handbags', label: 'Handbags', hidden: true },
+    { id: 'gifts', label: 'Gifts', hidden: true },
+    { id: 'now', label: 'Now & Trending', hidden: true },
+    { id: 'sale', label: 'Sale', isOrange: true, hidden: true }
   ];
+
+  const visibleCategories = categories.filter(cat => !cat.hidden);
   const aboutLinks = [
     { id: 'about', label: "About Coco's" },
     { id: 'vision', label: 'Vision' },
@@ -148,7 +150,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, cartCount = 0,
       <nav className="hidden md:block w-full border-t border-gray-100">
         <div className="max-w-[1600px] mx-auto flex items-center px-4 py-3 text-[12px] font-bold overflow-x-auto hide-scrollbar">
           <div className="flex gap-8 items-center whitespace-nowrap">
-            {categories.map((cat, idx) => {
+            {visibleCategories.map((cat, idx) => {
               if (cat.id === 'about') {
                 const isAboutPage = ['about', 'vision', 'mission', 'core-values', 'home-ground'].includes(currentPage);
                 return (
@@ -212,7 +214,7 @@ const Header: React.FC<HeaderProps> = ({ onNavigate, currentPage, cartCount = 0,
                   <p className="font-black text-sm uppercase">{user ? `Hi, ${user.firstName}` : 'Sign In / Register'}</p>
                 </div>
               </div>
-              {categories.map(cat => (
+              {visibleCategories.map(cat => (
                 cat.id === 'about' ? (
                   <div key={cat.id} className="border-b border-gray-100 py-3">
                     <button

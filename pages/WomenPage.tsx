@@ -163,6 +163,22 @@ const WomenPage: React.FC<Props> = ({
     [categories],
   );
 
+  const getCategoryPriority = (product: Product): number => {
+    const slugs = product.categorySlugs ?? [];
+    const imageUrl = product.imageUrl.toLowerCase();
+
+    if (slugs.includes('dresses') || hasDressMedia(product)) {
+      return 1; // Dresses first
+    }
+    if (slugs.includes('blouses') || hasBlouseMedia(product)) {
+      return 2; // Blouses second
+    }
+    if (slugs.includes('shoes') || imageUrl.includes('/ladies-shoes/') || imageUrl.includes('/shoes/')) {
+      return 3; // Shoes last
+    }
+    return 0; // Other products in the middle
+  };
+
   const filteredProducts = useMemo(() => {
     let filtered = womenProducts;
 
@@ -187,6 +203,9 @@ const WomenPage: React.FC<Props> = ({
       sorted.sort((left, right) => priceMinor(right) - priceMinor(left));
     } else if (filterState.sortBy === 'top-rated') {
       sorted.sort((left, right) => (right.rating ?? 0) - (left.rating ?? 0) || reviewsCount(right) - reviewsCount(left));
+    } else {
+      // Featured: Sort by category priority (dresses first, then blouses, then shoes)
+      sorted.sort((left, right) => getCategoryPriority(left) - getCategoryPriority(right));
     }
 
     return sorted;
