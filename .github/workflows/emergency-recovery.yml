@@ -16,22 +16,38 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup SSH
+      - name: Setup SSH (with key fix)
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+
+          # Fix SSH key format and permissions
           chmod 600 ~/.ssh/id_rsa
+          ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub || echo "Key format OK"
+
+          # Add host to known hosts
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection
+        run: |
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} \
+            -o "StrictHostKeyChecking=no" \
+            -o "ConnectTimeout=10" \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
+            "echo 'SSH connection successful'"
 
       - name: Upload recovery script
         run: |
           scp -i ~/.ssh/id_rsa -P ${{ secrets.VPS_PORT }} \
+            -o "StrictHostKeyChecking=no" \
+            -o "ConnectTimeout=10" \
             deploy/hostinger/emergency-recovery.sh \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/tmp/emergency-recovery.sh
 
       - name: Run recovery script
         run: |
           ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} \
+            -o "StrictHostKeyChecking=no" \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
             "chmod +x /tmp/emergency-recovery.sh && sudo /tmp/emergency-recovery.sh"
 
@@ -45,4 +61,4 @@ jobs:
 
       - name: Cleanup
         if: always()
-        run: rm -f ~/.ssh/id_rsa
+        run: rm -f ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
