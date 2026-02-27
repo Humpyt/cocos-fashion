@@ -135,6 +135,10 @@ Create these GitHub Actions secrets in your repository:
 - `VPS_USER` (example: `deploy`)
 - `VPS_SSH_PRIVATE_KEY` (private key that matches `/home/deploy/.ssh/authorized_keys`)
 
+Security note:
+- Keep SSH private keys outside this repository (for example under `~/.ssh/`).
+- Do not store keys like `deploy_key` in project folders, even temporarily.
+
 Trigger behavior:
 - Push to `main` deploys automatically.
 - Manual deploy is available via `workflow_dispatch` and optional `ref` input.

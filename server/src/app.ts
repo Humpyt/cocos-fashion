@@ -35,6 +35,7 @@ const blousesDir = resolve(currentDir, "../../public/blouses");
 const dressesDir = resolve(currentDir, "../../public/dresses");
 const waistcoatsDir = resolve(currentDir, "../../public/waist-coats");
 const ladiesShoesDir = resolve(currentDir, "../../public/Ladies Shoes");
+const menDir = resolve(currentDir, "../../public/Men");
 
 app.use(
   pinoHttp({
@@ -79,6 +80,7 @@ app.use("/blouses", express.static(blousesDir));
 app.use("/dresses", express.static(dressesDir));
 app.use("/waist-coats", express.static(waistcoatsDir));
 app.use("/ladies-shoes", express.static(ladiesShoesDir));
+app.use("/Men", express.static(menDir));
 
 app.get("/health", (_req, res) => {
   return res.status(200).json({

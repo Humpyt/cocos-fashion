@@ -25,6 +25,16 @@ interface GoogleUserInfo {
   locale: string;
 }
 
+const ensureString = (
+  value: string | null | undefined,
+  errorMessage: string,
+): string => {
+  if (typeof value !== 'string' || value.length === 0) {
+    unauthorized(errorMessage);
+  }
+  return value as string;
+};
+
 const verifyGoogleToken = async (idToken: string): Promise<GoogleUserInfo> => {
   try {
     const ticket = await oauth2Client.verifyIdToken({
@@ -32,24 +42,21 @@ const verifyGoogleToken = async (idToken: string): Promise<GoogleUserInfo> => {
       audience: env.GOOGLE_CLIENT_ID,
     });
     const payload = ticket.getPayload();
-    if (!payload || !payload.sub || !payload.email) {
-      unauthorized('Invalid Google token');
-      return; // TypeScript control flow, never reached
-    }
+    const subject = ensureString(payload?.sub, 'Invalid Google token');
+    const email = ensureString(payload?.email, 'Invalid Google token');
     return {
-      id: payload.sub,
-      email: payload.email,
-      email_verified: payload.email_verified || false,
-      name: payload.name || '',
-      given_name: payload.given_name || '',
-      family_name: payload.family_name || '',
-      picture: payload.picture || '',
-      locale: payload.locale || '',
+      id: subject,
+      email,
+      email_verified: payload?.email_verified === true,
+      name: payload?.name || '',
+      given_name: payload?.given_name || '',
+      family_name: payload?.family_name || '',
+      picture: payload?.picture || '',
+      locale: payload?.locale || '',
     };
   } catch (error) {
     console.error('Google token verification error:', error);
-    unauthorized('Failed to verify Google token');
-    return; // TypeScript control flow, never reached
+    throw unauthorized('Failed to verify Google token');
   }
 };
 
@@ -62,18 +69,14 @@ const getAuthorizationUrl = (state: string): string => {
   });
 };
 
-const exchangeCodeForTokens = async (code: string) => {
+const exchangeCodeForTokens = async (code: string): Promise<{ idToken: string }> => {
   try {
     const { tokens } = await oauth2Client.getToken(code);
-    if (!tokens.id_token) {
-      unauthorized('Failed to obtain ID token from Google');
-      return; // TypeScript control flow, never reached
-    }
-    return tokens;
+    const idToken = ensureString(tokens.id_token, 'Failed to obtain ID token from Google');
+    return { idToken };
   } catch (error) {
     console.error('Google token exchange error:', error);
-    unauthorized('Failed to exchange authorization code for tokens');
-    return; // TypeScript control flow, never reached
+    throw unauthorized('Failed to exchange authorization code for tokens');
   }
 };
 
@@ -83,8 +86,8 @@ export const googleAuthCallback = async (
   userAgent?: string,
 ) => {
   try {
-    const tokens = await exchangeCodeForTokens(code);
-    const googleUser = await verifyGoogleToken(tokens.id_token!);
+    const { idToken } = await exchangeCodeForTokens(code);
+    const googleUser = await verifyGoogleToken(idToken);
 
     if (!googleUser.email_verified) {
       badRequest('Email not verified by Google');
@@ -179,7 +182,6 @@ export const getGoogleAuthUrl = (state: string): string => {
     console.error('GOOGLE_CLIENT_ID:', env.GOOGLE_CLIENT_ID);
     console.error('GOOGLE_CLIENT_SECRET:', env.GOOGLE_CLIENT_SECRET ? 'SET' : 'NOT SET');
     badRequest('Google OAuth not configured. Please contact support.');
-    return; // TypeScript control flow, never reached
   }
   return getAuthorizationUrl(state);
 };
