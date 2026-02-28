@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { getImageByIndex } from '../imageStore';
 import { Trash2, Heart, ChevronRight, Info, ShieldCheck, Truck } from 'lucide-react';
 import { CartItem, Product } from '../types';
@@ -9,7 +10,6 @@ interface Props {
   onRemoveItem: (id: string, size?: string, color?: string) => void;
   onUpdateQuantity: (id: string, quantity: number, size?: string, color?: string) => void;
   onProductClick: (product: Product) => void;
-  onNavigate: (page: string) => void;
   onQuickView?: (product: Product) => void;
   onToggleWishlist?: (product: Product) => void;
   wishlist?: Product[];
@@ -20,7 +20,6 @@ const CartPage: React.FC<Props> = ({
   onRemoveItem,
   onUpdateQuantity,
   onProductClick,
-  onNavigate,
   onQuickView,
   onToggleWishlist,
   wishlist = []
@@ -46,12 +45,12 @@ const CartPage: React.FC<Props> = ({
       <div className="max-w-[1600px] mx-auto px-4 py-20 text-center">
         <h1 className="text-3xl font-black uppercase mb-6 tracking-tight">Your bag is empty</h1>
         <p className="text-gray-500 mb-10">Start shopping and discover something new today.</p>
-        <button
-          onClick={() => onNavigate('home')}
+        <Link
+          to="/"
           className="bg-cocos-orange text-white px-12 py-4 font-black uppercase text-sm tracking-widest hover:bg-black transition-colors"
         >
           Shop Now
-        </button>
+        </Link>
       </div>
     );
   }
@@ -162,12 +161,12 @@ const CartPage: React.FC<Props> = ({
                 <span className="text-xl font-black">UGX {subtotal.toLocaleString()}</span>
               </div>
 
-              <button
-                onClick={() => onNavigate('checkout')}
-                className="w-full bg-cocos-orange text-white py-4 font-black uppercase text-sm tracking-widest hover:bg-black transition-colors shadow-lg shadow-cocos-orange/20 mb-4"
+              <Link
+                to="/checkout"
+                className="w-full bg-cocos-orange text-white py-4 font-black uppercase text-sm tracking-widest hover:bg-black transition-colors shadow-lg shadow-cocos-orange/20 mb-4 block text-center"
               >
                 Proceed to Checkout
-              </button>
+              </Link>
 
               <button className="w-full bg-white border border-black text-black py-4 font-black uppercase text-sm tracking-widest hover:bg-gray-50 transition-colors">
                 PayPal Checkout

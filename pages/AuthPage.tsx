@@ -6,10 +6,9 @@ import { authApi, tokenStore } from '../lib/api';
 
 interface Props {
   onSignIn: (user: User) => void;
-  onNavigate: (page: string) => void;
 }
 
-const AuthPage: React.FC<Props> = ({ onSignIn, onNavigate }) => {
+const AuthPage: React.FC<Props> = ({ onSignIn }) => {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');

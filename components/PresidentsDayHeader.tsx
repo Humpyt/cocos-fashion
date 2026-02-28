@@ -10,17 +10,17 @@ const PresidentsDayHeader: React.FC = () => {
           {/* Left: Title and Subtext */}
           <div className="flex flex-col text-center lg:text-left">
             <h2 className="font-serif-promo text-[24px] md:text-[42px] font-bold leading-tight tracking-tight text-black">
-              Presidents’ Day Sale
+              Seasonal Sale
             </h2>
             <p className="text-[10px] md:text-[12px] font-bold mt-1 text-gray-700 max-w-sm mx-auto lg:mx-0">
-              Long weekend ahead—save now on denim, activewear, home & more.
+              Discover amazing deals on dresses, activewear, shoes & more.
             </p>
           </div>
 
           {/* Right: Discount and Button */}
           <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-12 w-full lg:w-auto">
             <div className="font-serif-promo text-[28px] md:text-[48px] font-black leading-none whitespace-nowrap text-cocos-orange lg:text-black">
-              Up to 60% OFF
+              Up to 30% OFF
             </div>
             
             <div className="w-full sm:w-auto">

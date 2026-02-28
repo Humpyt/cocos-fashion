@@ -19,11 +19,10 @@ import { ordersApi, resolveMediaUrl, tokenStore } from '../lib/api';
 interface Props {
   user: User;
   onSignOut: () => void;
-  onNavigate: (page: string) => void;
   onQuickView?: (product: Product) => void;
 }
 
-const DashboardPage: React.FC<Props> = ({ user, onSignOut, onNavigate, onQuickView }) => {
+const DashboardPage: React.FC<Props> = ({ user, onSignOut, onQuickView }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'wallet' | 'profile'>('overview');
 
   const defaultOrders: Order[] = [

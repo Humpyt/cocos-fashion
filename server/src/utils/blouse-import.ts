@@ -2,7 +2,7 @@ import { slugify } from "./slug.js";
 
 export type ParseConfidence = "high" | "medium" | "low";
 
-export type ParsedDressFile = {
+export type ParsedBlouseFile = {
   rawFilename: string;
   imageUrl: string;
   brand: string | null;
@@ -16,7 +16,7 @@ export type ParsedDressFile = {
   shouldSkip: boolean;
 };
 
-export type DressImportGroup = {
+export type BlouseImportGroup = {
   key: string;
   slug: string;
   brand: string;
@@ -32,21 +32,21 @@ export type DressImportGroup = {
 };
 
 const ALT_IMAGE_PATTERN = /\b(back|rear|detail|side|alt)\b/i;
-// Remove copy suffixes like " 2", " (2)", "(2)" that appear after prices anywhere in filename
-const COPY_SUFFIX_PATTERN = /\s*\(\d+\)\s*|\s+\d+\s*$/;
 const STYLE_PATTERNS: Array<{ pattern: RegExp; style: string }> = [
-  { pattern: /\blinen\s*blend\b/i, style: "Linen Blend" },
-  { pattern: /\bsequin|sequins\b/i, style: "Sequin" },
-  { pattern: /\bjacket\b/i, style: "Jacket Set" },
   { pattern: /\bfloral|flowers?\b/i, style: "Floral" },
-  { pattern: /\bchecked?|check\b/i, style: "Checked" },
   { pattern: /\bprinted?|stripped|striped|snake\s*print\b/i, style: "Printed" },
+  { pattern: /\bchecked?|check\b/i, style: "Checked" },
+  { pattern: /\bstriped?\b/i, style: "Striped" },
+  { pattern: /\bsolid\b/i, style: "Solid" },
+  { pattern: /\bmulti\b/i, style: "Multi" },
 ];
 
 const STYLE_FILLER_PATTERN =
-  /\b(linen|blend|sequin|sequins|jacket|floral|flower|flowers|checked?|check|printed?|striped|stripped|snake|print)\b/gi;
+  /\b(linen|blend|sequin|sequins|jacket|floral|flower|flowers|checked?|check|printed?|striped|stripped|solid|multi|snake|print)\b/gi;
 const COLOR_FILLER_PATTERN =
-  /\b(size|sizes|and|or|with|set|team|buttons?|button|dress|us|w)\b/gi;
+  /\b(size|sizes|and|or|with|set|team|buttons?|button|blouse|us|w)\b/gi;
+// Remove copy suffixes like " 2", " (2)", "(2)" that appear after prices anywhere in filename
+const COPY_SUFFIX_PATTERN = /\s*\(\d+\)\s*|\s+\d+\s*$/;
 
 const SIZE_CODE_ORDER = [
   "XXXS",
@@ -180,7 +180,7 @@ const inferStyleDescriptor = (value: string): string => {
       return styleRule.style;
     }
   }
-  return "Dress";
+  return "Blouse";
 };
 
 const extractBrand = (normalizedText: string): string | null => {
@@ -243,7 +243,7 @@ const confidenceRank = (value: ParseConfidence): number => {
 const lowerConfidence = (left: ParseConfidence, right: ParseConfidence): ParseConfidence =>
   confidenceRank(left) <= confidenceRank(right) ? left : right;
 
-export const parseDressFilename = (filename: string): ParsedDressFile => {
+export const parseBlouseFilename = (filename: string): ParsedBlouseFile => {
   const normalized = normalizeForParsing(filename);
   const brand = extractBrand(normalized);
   const priceMinor = parsePriceMinor(normalized);
@@ -268,7 +268,7 @@ export const parseDressFilename = (filename: string): ParsedDressFile => {
 
   return {
     rawFilename: filename,
-    imageUrl: `/dresses/${encodeURIComponent(filename)}`,
+    imageUrl: `/blouses/${encodeURIComponent(filename)}`,
     brand,
     styleDescriptor,
     color,
@@ -281,13 +281,13 @@ export const parseDressFilename = (filename: string): ParsedDressFile => {
   };
 };
 
-const buildGroupKey = (parsed: ParsedDressFile): string =>
+const buildGroupKey = (parsed: ParsedBlouseFile): string =>
   slugify(
     `${parsed.brand ?? "unknown"}-${parsed.styleDescriptor}-${parsed.color}-${parsed.priceMinor ?? 0}`,
   );
 
-export const buildDressImportGroups = (parsedFiles: ParsedDressFile[]): DressImportGroup[] => {
-  const grouped = new Map<string, ParsedDressFile[]>();
+export const buildBlouseImportGroups = (parsedFiles: ParsedBlouseFile[]): BlouseImportGroup[] => {
+  const grouped = new Map<string, ParsedBlouseFile[]>();
   for (const parsed of parsedFiles) {
     if (parsed.shouldSkip) continue;
     const key = buildGroupKey(parsed);
@@ -299,7 +299,7 @@ export const buildDressImportGroups = (parsedFiles: ParsedDressFile[]): DressImp
     }
   }
 
-  const groups: DressImportGroup[] = [];
+  const groups: BlouseImportGroup[] = [];
   for (const [key, items] of grouped.entries()) {
     const base = items[0];
     const imageItems = [...items].sort((left, right) => {

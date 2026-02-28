@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { Star, Heart, Share2, Info, ChevronRight, Truck, Store, ShieldCheck } from 'lucide-react';
 import { Product } from '../types';
-import { getImageByIndex } from '../imageStore';
 import ProductSlider from '../components/ProductSlider';
 
 interface Props {
@@ -20,12 +19,8 @@ const ProductDetailPage: React.FC<Props> = ({ product, onProductClick, onAddToBa
   const [mainImage, setMainImage] = useState(product.imageUrl);
 
   const sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-  const thumbnails = [
-    product.imageUrl,
-    getImageByIndex(10),
-    getImageByIndex(12),
-    getImageByIndex(14)
-  ];
+  // Use only actual product images - no placeholder images
+  const thumbnails = [product.imageUrl];
 
   const isInWishlist = wishlist.some(p => p.id === product.id);
 

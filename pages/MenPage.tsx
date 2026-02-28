@@ -36,22 +36,25 @@ const localAsset = (path: string) => encodeURI(path);
 
 const categoryImagePool = [
   '/men.jpg',
+  '/Men/Shirts/Polo, yellow size L. 250k.jpeg',
   '/Men/Shirts/Charles tyrwhitt,white sizes. 15.534in  To 17.536in.  230k- 370k.jpeg',
-  '/Men/Shirts/Polo, blue stripped, size s. 400k.jpeg',
   '/Men/Shirts/Club room, yellow linen. Sizes M &XXL.  280k.jpeg',
+  '/Men/Shirts/Polo, blue stripped, size s. 400k.jpeg',
   '/Men/Shirts/Maurano, maroon size XL. 280K.jpeg',
-  '/Men/Shirts/Polo, multi checked. Size S. 400k.jpeg',
-  '/Men/Shirts/Polo, maroon checked. Size XL. 400K.jpeg',
+  '/Men/T-Shirts/Lacoste, navy size XL. 250k.jpeg',
+  '/Men/T-Shirts/Levis, shirt orange. Sizes S and XL. 200K.jpeg',
+  '/Men/T-Shirts/Polo, navy size XL 380k.jpeg',
+  '/Men/T-Shirts/Tommy hilfiger, navy size M 200k.jpeg',
 ].map(localAsset);
 
 const slugImageMap: Record<string, string> = {
   men: localAsset('/Men/Shirts/Polo, yellow size L. 250k.jpeg'),
   shirts: localAsset('/Men/Shirts/Charles tyrwhitt,white sizes. 15.534in  To 17.536in.  230k- 370k.jpeg'),
-  shoes: localAsset('/Men/Shirts/Polo, blue stripped, size s. 400k.jpeg'),
-  watches: localAsset('/Men/Shirts/Club room, yellow linen. Sizes M &XXL.  280k.jpeg'),
-  activewear: localAsset('/Men/Shirts/Maurano, maroon size XL. 280K.jpeg'),
-  denim: localAsset('/Men/Shirts/Polo, multi checked. Size S. 400k.jpeg'),
-  't-shirts': localAsset('/Men/T-Shirts/Polo, navy size XL 380k.jpeg'),
+  shoes: localAsset('/Men/T-Shirts/Polo, navy size XL 380k.jpeg'),
+  watches: localAsset('/Men/Shirts/Lacoste, navy size XL. 250k.jpeg'),
+  activewear: localAsset('/Men/T-Shirts/Levis, shirt orange. Sizes S and XL. 200K.jpeg'),
+  denim: localAsset('/Men/T-Shirts/Levis, ash navy. size M. 200k.jpeg'),
+  't-shirts': localAsset('/Men/T-Shirts/Tommy hilfiger, navy size M 200k.jpeg'),
 };
 
 const resolveCategoryImage = (slug: string, index: number): string => {
@@ -256,7 +259,7 @@ const MenPage: React.FC<Props> = ({
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/25 to-transparent" />
         <div className="relative z-10 text-center text-white drop-shadow-lg">
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-black italic uppercase tracking-tighter mb-3">Master the Season</h2>
-          <p className="text-sm sm:text-base md:text-xl font-bold uppercase tracking-[0.25em]">DESIGNER SHIRTS & SHOES 40-60% OFF</p>
+          <p className="text-sm sm:text-base md:text-xl font-bold uppercase tracking-[0.25em]">DESIGNER SHIRTS & SHOES UP TO 30% OFF</p>
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
             <button
               type="button"

@@ -1,5 +1,6 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
@@ -51,8 +52,11 @@ const InfoPage: React.FC<InfoPageProps> = ({ title, subtitle, points }) => (
 );
 
 const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState('home');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const productSlug = searchParams.get('product');
+
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<Product[]>([]);
   const [user, setUser] = useState<User | null>(null);
@@ -89,10 +93,10 @@ const App: React.FC = () => {
     });
   }, [catalogProducts]);
 
-  // Scroll to top when page changes
+  // Scroll to top when route changes
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [currentPage, selectedProduct]);
+  }, [location.pathname, location.search]);
 
   useEffect(() => {
     const restoreSession = async () => {
@@ -204,9 +208,12 @@ const App: React.FC = () => {
     );
   };
 
+  const findProductBySlug = (slug: string): Product | undefined => {
+    return catalogProductsForUi.find((product) => product.slug === slug);
+  };
+
   const handleProductClick = (product: Product) => {
-    setSelectedProduct(product);
-    setCurrentPage('productDetail');
+    navigate(`/?product=${product.slug}`);
   };
 
   const addToCart = (product: Product, quantity: number, size?: string, color?: string) => {
@@ -223,7 +230,6 @@ const App: React.FC = () => {
 
       return [...prevCart, { ...product, quantity, selectedSize: size, selectedColor: color }];
     });
-    setCurrentPage('cart');
 
     const token = tokenStore.getAccessToken();
     const guestId = tokenStore.getOrCreateGuestId();
@@ -289,7 +295,7 @@ const App: React.FC = () => {
 
   const handleSignIn = (userData: User) => {
     setUser(userData);
-    setCurrentPage(userData.role === 'ADMIN' ? 'admin' : 'dashboard');
+    const redirectPath = userData.role === 'ADMIN' ? '/admin' : '/dashboard';
 
     void (async () => {
       const token = tokenStore.getAccessToken();
@@ -307,6 +313,8 @@ const App: React.FC = () => {
       if (wishlistIds.length) {
         await wishlistApi.merge(token, wishlistIds).catch(() => undefined);
       }
+
+      navigate(redirectPath);
     })();
   };
 
@@ -319,165 +327,192 @@ const App: React.FC = () => {
       } finally {
         tokenStore.clearAccessToken();
         setUser(null);
-        setCurrentPage('home');
+        navigate('/');
       }
     })();
   };
 
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'home':
-        return (
-          <HomePage
-            apiProducts={catalogProductsForUi}
-            onNavigate={setCurrentPage}
-            onProductClick={handleProductClick}
-            onToggleWishlist={toggleWishlist}
-            onAddToBag={addToCart}
-            onQuickView={setQuickViewProduct}
-            wishlist={wishlist}
-          />
-        );
-      case 'women':
-        return (
-          <WomenPage
-            apiProducts={catalogProductsForUi}
-            apiCategories={catalogCategories}
-            isCatalogLoading={isCatalogLoading}
-            onProductClick={handleProductClick}
-            onToggleWishlist={toggleWishlist}
-            onQuickView={setQuickViewProduct}
-            onAddToBag={addToCart}
-            wishlist={wishlist}
-          />
-        );
-      case 'men':
-        return <MenPage apiProducts={catalogProductsForUi} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onQuickView={setQuickViewProduct} wishlist={wishlist} />;
-      case 'shoes':
-        return <ShoesPage apiProducts={catalogProductsForUi} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onQuickView={setQuickViewProduct} wishlist={wishlist} />;
-      case 'handbags':
-        return <HandbagsPage apiProducts={catalogProductsForUi} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onQuickView={setQuickViewProduct} wishlist={wishlist} />;
-      case 'wishlist':
-        return <WishlistPage wishlist={wishlist} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} onNavigate={setCurrentPage} onQuickView={setQuickViewProduct} />;
-      case 'about':
-        return (
-          <InfoPage
-            title="About Coco's"
-            subtitle="Coco's Fashion Brands Uganda curates quality fashion with a strong local identity."
-            points={[
-              "We combine global inspiration with styles that fit everyday life in Uganda.",
-              "Our goal is to make premium fashion more accessible through trusted sourcing and fair pricing.",
-              "We continue investing in digital shopping experiences and responsive customer support.",
-            ]}
-          />
-        );
-      case 'vision':
-        return (
-          <InfoPage
-            title="Vision"
-            subtitle="To become East Africa's most trusted destination for modern, accessible fashion."
-            points={[
-              "Lead with customer trust, quality, and consistency in every category.",
-              "Set a new standard for seamless omnichannel fashion shopping in the region.",
-              "Build a long-term brand that celebrates confidence, creativity, and culture.",
-            ]}
-          />
-        );
-      case 'mission':
-        return (
-          <InfoPage
-            title="Mission"
-            subtitle="Deliver exceptional fashion value through curated products, reliable service, and innovation."
-            points={[
-              "Offer thoughtfully selected products that balance style, quality, and affordability.",
-              "Serve customers quickly and transparently across shopping, delivery, and support.",
-              "Continuously improve our platform and operations based on customer feedback.",
-            ]}
-          />
-        );
-      case 'core-values':
-        return (
-          <InfoPage
-            title="Core Values"
-            subtitle="Our values drive every product decision, customer interaction, and business partnership."
-            points={[
-              "Customer First: We prioritize customer needs and long-term satisfaction.",
-              "Integrity: We communicate clearly and honor our commitments.",
-              "Excellence: We hold a high bar for quality, detail, and execution.",
-              "Innovation: We adapt fast and build for tomorrow's shopper.",
-            ]}
-          />
-        );
-      case 'home-ground':
-        return (
-          <InfoPage
-            title="Home Ground"
-            subtitle="Proudly rooted in Uganda, serving a growing community of fashion-forward customers."
-            points={[
-              "Our home market shapes how we design assortments, pricing, and service.",
-              "We collaborate with local teams and partners to stay close to customer needs.",
-              "From Kampala outward, we are committed to scaling with local relevance and global standards.",
-            ]}
-          />
-        );
-      case 'cart':
-        return <CartPage cart={cart} onRemoveItem={removeFromCart} onUpdateQuantity={updateQuantity} onProductClick={handleProductClick} onNavigate={setCurrentPage} onQuickView={setQuickViewProduct} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
-      case 'checkout':
-        return (
-          <CheckoutPage
-            cart={cart}
-            onNavigate={setCurrentPage}
-            onOrderComplete={() => {
-              clearCart();
-              setCurrentPage('home');
-            }}
-          />
-        );
-      case 'auth':
-        return <AuthPage onSignIn={handleSignIn} onNavigate={setCurrentPage} />;
-      case 'dashboard':
-        return user ? (
-          <DashboardPage user={user} onSignOut={handleSignOut} onNavigate={setCurrentPage} onQuickView={setQuickViewProduct} />
-        ) : (
-          <AuthPage onSignIn={handleSignIn} onNavigate={setCurrentPage} />
-        );
-      case 'admin':
-        return user ? (
-          user.role === 'ADMIN'
-            ? <AdminPage user={user} onSignOut={handleSignOut} />
-            : <DashboardPage user={user} onSignOut={handleSignOut} onNavigate={setCurrentPage} onQuickView={setQuickViewProduct} />
-        ) : (
-          <AuthPage onSignIn={handleSignIn} onNavigate={setCurrentPage} />
-        );
-      case 'productDetail':
-        return selectedProduct ? (
-          <ProductDetailPage
-            product={selectedProduct}
-            onProductClick={handleProductClick}
-            onAddToBag={addToCart}
-            onToggleWishlist={toggleWishlist}
-            wishlist={wishlist}
-          />
-        ) : (
-          <HomePage apiProducts={catalogProductsForUi} onNavigate={setCurrentPage} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />
-        );
-      default:
-        return <HomePage apiProducts={catalogProductsForUi} onNavigate={setCurrentPage} onProductClick={handleProductClick} onToggleWishlist={toggleWishlist} wishlist={wishlist} />;
-    }
-  };
+  const selectedProduct = productSlug ? findProductBySlug(productSlug) : null;
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header
-        onNavigate={setCurrentPage}
-        currentPage={currentPage}
         cartCount={cart.reduce((sum, item) => sum + item.quantity, 0)}
         wishlistCount={wishlist.length}
         user={user}
       />
 
       <main className="flex-grow">
-        {renderPage()}
+        <Routes>
+          <Route path="/" element={
+            selectedProduct ? (
+              <ProductDetailPage
+                product={selectedProduct}
+                onProductClick={handleProductClick}
+                onAddToBag={addToCart}
+                onToggleWishlist={toggleWishlist}
+                wishlist={wishlist}
+              />
+            ) : (
+              <HomePage
+                apiProducts={catalogProductsForUi}
+                onProductClick={handleProductClick}
+                onToggleWishlist={toggleWishlist}
+                onAddToBag={addToCart}
+                onQuickView={setQuickViewProduct}
+                wishlist={wishlist}
+              />
+            )
+          } />
+          <Route path="/women" element={
+            <WomenPage
+              apiProducts={catalogProductsForUi}
+              apiCategories={catalogCategories}
+              isCatalogLoading={isCatalogLoading}
+              onProductClick={handleProductClick}
+              onToggleWishlist={toggleWishlist}
+              onQuickView={setQuickViewProduct}
+              onAddToBag={addToCart}
+              wishlist={wishlist}
+            />
+          } />
+          <Route path="/men" element={
+            <MenPage
+              apiProducts={catalogProductsForUi}
+              onProductClick={handleProductClick}
+              onToggleWishlist={toggleWishlist}
+              onQuickView={setQuickViewProduct}
+              wishlist={wishlist}
+            />
+          } />
+          <Route path="/shoes" element={
+            <ShoesPage
+              apiProducts={catalogProductsForUi}
+              onProductClick={handleProductClick}
+              onToggleWishlist={toggleWishlist}
+              onQuickView={setQuickViewProduct}
+              wishlist={wishlist}
+            />
+          } />
+          <Route path="/handbags" element={
+            <HandbagsPage
+              apiProducts={catalogProductsForUi}
+              onProductClick={handleProductClick}
+              onToggleWishlist={toggleWishlist}
+              onQuickView={setQuickViewProduct}
+              wishlist={wishlist}
+            />
+          } />
+          <Route path="/wishlist" element={
+            <WishlistPage
+              wishlist={wishlist}
+              onProductClick={handleProductClick}
+              onToggleWishlist={toggleWishlist}
+              onQuickView={setQuickViewProduct}
+            />
+          } />
+          <Route path="/about" element={
+            <InfoPage
+              title="About Coco's"
+              subtitle="Coco's Fashion Brands Uganda curates quality fashion with a strong local identity."
+              points={[
+                "We combine global inspiration with styles that fit everyday life in Uganda.",
+                "Our goal is to make premium fashion more accessible through trusted sourcing and fair pricing.",
+                "We continue investing in digital shopping experiences and responsive customer support.",
+              ]}
+            />
+          } />
+          <Route path="/vision" element={
+            <InfoPage
+              title="Vision"
+              subtitle="To become East Africa's most trusted destination for modern, accessible fashion."
+              points={[
+                "Lead with customer trust, quality, and consistency in every category.",
+                "Set a new standard for seamless omnichannel fashion shopping in the region.",
+                "Build a long-term brand that celebrates confidence, creativity, and culture.",
+              ]}
+            />
+          } />
+          <Route path="/mission" element={
+            <InfoPage
+              title="Mission"
+              subtitle="Deliver exceptional fashion value through curated products, reliable service, and innovation."
+              points={[
+                "Offer thoughtfully selected products that balance style, quality, and affordability.",
+                "Serve customers quickly and transparently across shopping, delivery, and support.",
+                "Continuously improve our platform and operations based on customer feedback.",
+              ]}
+            />
+          } />
+          <Route path="/core-values" element={
+            <InfoPage
+              title="Core Values"
+              subtitle="Our values drive every product decision, customer interaction, and business partnership."
+              points={[
+                "Customer First: We prioritize customer needs and long-term satisfaction.",
+                "Integrity: We communicate clearly and honor our commitments.",
+                "Excellence: We hold a high bar for quality, detail, and execution.",
+                "Innovation: We adapt fast and build for tomorrow's shopper.",
+              ]}
+            />
+          } />
+          <Route path="/home-ground" element={
+            <InfoPage
+              title="Home Ground"
+              subtitle="Proudly rooted in Uganda, serving a growing community of fashion-forward customers."
+              points={[
+                "Our home market shapes how we design assortments, pricing, and service.",
+                "We collaborate with local teams and partners to stay close to customer needs.",
+                "From Kampala outward, we are committed to scaling with local relevance and global standards.",
+              ]}
+            />
+          } />
+          <Route path="/cart" element={
+            <CartPage
+              cart={cart}
+              onRemoveItem={removeFromCart}
+              onUpdateQuantity={updateQuantity}
+              onProductClick={handleProductClick}
+              onQuickView={setQuickViewProduct}
+              onToggleWishlist={toggleWishlist}
+              wishlist={wishlist}
+            />
+          } />
+          <Route path="/checkout" element={
+            <CheckoutPage
+              cart={cart}
+              onOrderComplete={() => {
+                clearCart();
+                navigate('/');
+              }}
+            />
+          } />
+          <Route path="/auth" element={
+            <AuthPage onSignIn={handleSignIn} />
+          } />
+          <Route path="/dashboard" element={
+            user ? (
+              <DashboardPage
+                user={user}
+                onSignOut={handleSignOut}
+                onQuickView={setQuickViewProduct}
+              />
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          } />
+          <Route path="/admin" element={
+            user ? (
+              user.role === 'ADMIN' ? (
+                <AdminPage user={user} onSignOut={handleSignOut} />
+              ) : (
+                <Navigate to="/dashboard" replace />
+              )
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          } />
+        </Routes>
       </main>
 
       <Footer />

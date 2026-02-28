@@ -35,7 +35,8 @@ export type MenImportGroup = {
 
 const ALT_IMAGE_PATTERN = /\b(back|rear|detail|side|alt)\b/i;
 const PRICE_TOKEN_PATTERN = /(\d+(?:\.\d+)?)\s*[kK]\b(?!\s*(?:US|UK)\b)/i;
-const COPY_SUFFIX_PATTERN = /\s*\((\d+)\)\s*$/;
+// Remove copy suffixes like " 2", " (2)", "(2)" that appear after prices anywhere in filename
+const COPY_SUFFIX_PATTERN = /\s*\(\d+\)\s*|\s+\d+\s*$/;
 const SIZE_RANGE_PATTERN = /(\d+(?:\.\d+)?)\s*(?:in)?\s*(?:to|To|TO|-)\s*(\d+(?:\.\d+)?)\s*in/gi;
 
 const SIZE_CODE_ORDER = [

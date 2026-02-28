@@ -15,6 +15,7 @@
     "catalog:import:ladies-shoes": "tsx scripts/import-ladies-shoes.ts",
     "catalog:import:men": "tsx scripts/import-men.ts",
     "catalog:backfill:blouses": "tsx scripts/backfill-blouses-category.ts",
+    "catalog:deduplicate": "node scripts/deduplicate-products.cjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

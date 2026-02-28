@@ -1,24 +1,46 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, Youtube, Pin as Pinterest, ChevronDown } from 'lucide-react';
 
 const Footer: React.FC = () => {
   const sections = [
     {
-      title: 'Customer Service',
-      links: ['Contact Coco\'s', 'FAQs', 'Klarna', 'Order Lookup', 'Para Ayuda', 'Returns', 'Shipping & Delivery'],
+      title: 'Shop Coco\'s',
+      links: [
+        { label: 'Women', path: '/women' },
+        { label: 'Men', path: '/men' },
+        { label: 'Shoes', path: '/shoes' },
+        { label: 'Handbags', path: '/handbags' },
+      ],
     },
     {
-      title: "Coco's Style Card",
-      links: ["Apply for Coco's Card", 'Style Rewards Benefits', 'Gift Cards', 'Gift Card Balance', "Card Services", 'Pay Your Bill'],
+      title: 'About Us',
+      links: [
+        { label: "About Coco's", path: '/about' },
+        { label: 'Vision', path: '/vision' },
+        { label: 'Mission', path: '/mission' },
+        { label: 'Core Values', path: '/core-values' },
+        { label: 'Home Ground', path: '/home-ground' },
+      ],
     },
     {
-      title: 'Stores & Services',
-      links: ['Pickup', 'Locations', "Coco's App", "Fashion Stylist", "Events", 'Feedback'],
+      title: 'My Account',
+      links: [
+        { label: 'Sign In / Register', path: '/auth' },
+        { label: 'My Dashboard', path: '/dashboard' },
+        { label: 'My Wishlist', path: '/wishlist' },
+        { label: 'Shopping Bag', path: '/cart' },
+      ],
     },
     {
-      title: "Coco's Inc.",
-      links: ['Corporate Sales', 'Investors', 'Sourcing', "Careers", 'Our Mission', 'Sustainability'],
+      title: 'Customer Care',
+      links: [
+        { label: 'Contact Us', path: '/about' },
+        { label: 'Shipping & Delivery', path: '/about' },
+        { label: 'Returns & Exchanges', path: '/about' },
+        { label: 'FAQ', path: '/about' },
+      ],
     },
   ];
 
@@ -36,7 +58,14 @@ const Footer: React.FC = () => {
                 </h4>
                 <ul className="flex flex-col gap-3 md:gap-2">
                   {section.links.map(link => (
-                    <li key={link} className="text-[12px] md:text-[11px] text-gray-400 hover:text-white hover:underline cursor-pointer transition-colors font-medium">{link}</li>
+                    <li key={link.label}>
+                      <Link
+                        to={link.path}
+                        className="text-[12px] md:text-[11px] text-gray-400 hover:text-white hover:underline cursor-pointer transition-colors font-medium"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
                   ))}
                 </ul>
               </div>

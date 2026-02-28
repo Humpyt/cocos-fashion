@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Heart, ShoppingBag, Trash2, ArrowLeft, Eye } from 'lucide-react';
 import { Product } from '../types';
 
@@ -7,20 +8,19 @@ interface Props {
   wishlist: Product[];
   onProductClick: (product: Product) => void;
   onToggleWishlist: (product: Product) => void;
-  onNavigate: (page: string) => void;
   onQuickView?: (product: Product) => void;
 }
 
-const WishlistPage: React.FC<Props> = ({ wishlist, onProductClick, onToggleWishlist, onNavigate, onQuickView }) => {
+const WishlistPage: React.FC<Props> = ({ wishlist, onProductClick, onToggleWishlist, onQuickView }) => {
   return (
     <div className="bg-[#F9F9F9] min-h-screen pb-20">
       <div className="max-w-[1600px] mx-auto px-4 py-12">
-        <button
-          onClick={() => onNavigate('home')}
+        <Link
+          to="/"
           className="flex items-center gap-2 text-sm font-bold uppercase hover:text-cocos-orange mb-8 transition-colors"
         >
           <ArrowLeft size={16} /> Back to Shopping
-        </button>
+        </Link>
 
         <div className="flex items-baseline gap-4 mb-12">
           <h1 className="text-[44px] font-black uppercase tracking-tighter font-serif-promo italic leading-none">Your Wishlist</h1>
@@ -34,12 +34,12 @@ const WishlistPage: React.FC<Props> = ({ wishlist, onProductClick, onToggleWishl
             </div>
             <h2 className="text-2xl font-black uppercase tracking-tight mb-4">No saved items yet</h2>
             <p className="text-gray-500 mb-10 max-w-md">Items added to your wishlist will show up here. Save your favorites to buy them later!</p>
-            <button
-              onClick={() => onNavigate('home')}
-              className="bg-cocos-orange text-white px-12 py-4 font-black uppercase text-sm tracking-widest hover:bg-black transition-colors"
+            <Link
+              to="/"
+              className="bg-cocos-orange text-white px-12 py-4 font-black uppercase text-sm tracking-widest hover:bg-black transition-colors block text-center"
             >
               Start Exploring
-            </button>
+            </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

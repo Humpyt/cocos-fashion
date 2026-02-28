@@ -1,16 +1,16 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ShieldCheck, Truck, ChevronLeft, CreditCard, Banknote, MapPin, CheckCircle2, Info } from 'lucide-react';
 import { CartItem } from '../types';
 import { ordersApi, tokenStore } from '../lib/api';
 
 interface Props {
   cart: CartItem[];
-  onNavigate: (page: string) => void;
   onOrderComplete: () => void;
 }
 
-const CheckoutPage: React.FC<Props> = ({ cart, onNavigate, onOrderComplete }) => {
+const CheckoutPage: React.FC<Props> = ({ cart, onOrderComplete }) => {
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'cod'>('card');
   const [isOrdering, setIsOrdering] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
@@ -96,12 +96,12 @@ const CheckoutPage: React.FC<Props> = ({ cart, onNavigate, onOrderComplete }) =>
       <div className="max-w-[1600px] mx-auto px-4">
         {/* Simplified Header for Checkout */}
         <div className="flex items-center gap-4 mb-8">
-          <button
-            onClick={() => onNavigate('cart')}
+          <Link
+            to="/cart"
             className="flex items-center gap-2 text-sm font-bold uppercase hover:text-cocos-orange"
           >
             <ChevronLeft size={16} /> Back to Bag
-          </button>
+          </Link>
           <div className="h-4 w-[1px] bg-gray-300"></div>
           <h1 className="text-2xl font-black uppercase tracking-tighter">Secure Checkout</h1>
         </div>
