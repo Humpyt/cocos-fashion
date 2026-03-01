@@ -3,12 +3,9 @@ import { User, Order } from '../types';
 import { getImageByIndex } from '../imageStore';
 import {
   Package,
-  Settings,
-  CreditCard,
   MapPin,
   LogOut,
   Star,
-  ChevronRight,
   Clock,
   ShieldCheck,
   Eye
@@ -23,7 +20,7 @@ interface Props {
 }
 
 const DashboardPage: React.FC<Props> = ({ user, onSignOut, onQuickView }) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'wallet' | 'profile'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'orders'>('overview');
 
   const defaultOrders: Order[] = [
     {
@@ -102,8 +99,6 @@ const DashboardPage: React.FC<Props> = ({ user, onSignOut, onQuickView }) => {
   const sidebarItems = [
     { id: 'overview', label: 'Dashboard', icon: Star },
     { id: 'orders', label: 'Order History', icon: Package },
-    { id: 'wallet', label: 'Wallet & Payments', icon: CreditCard },
-    { id: 'profile', label: 'Profile Settings', icon: Settings },
   ];
 
   const renderContent = () => {
@@ -113,54 +108,61 @@ const DashboardPage: React.FC<Props> = ({ user, onSignOut, onQuickView }) => {
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl font-black uppercase tracking-tighter">Your Orders</h2>
             {ordersError && <p className="text-xs text-red-600 font-bold">{ordersError}</p>}
-            {orders.map(order => (
-              <div key={order.id} className="bg-white border border-gray-200 p-6 flex flex-col md:flex-row gap-6 md:items-center">
-                <div className="flex-grow">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <p className="text-[11px] font-bold uppercase text-gray-400">Order ID: {order.id}</p>
-                      <p className="text-xs font-bold text-gray-500">Placed on {order.date}</p>
-                    </div>
-                    <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full ${order.status === 'Delivered' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-                      }`}>
-                      {order.status}
-                    </span>
-                  </div>
-                  <div className="flex gap-4">
-                    {order.items.map((item, i) => (
-                      <div key={i} className="flex items-center gap-4 group relative">
-                        <div className="relative w-12 h-16 overflow-hidden">
-                          <img src={item.imageUrl} className="w-full h-full object-cover border border-gray-100 group-hover:scale-105 transition-transform" alt={item.name} />
-                          <button
-                            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              // Convert order item to Product type for Quick View
-                              onQuickView?.({
-                                id: `order-${item.name}`,
-                                name: item.name,
-                                imageUrl: item.imageUrl,
-                                price: order.total, // fallback
-                                brand: 'Coco Fashion',
-                                rating: 5,
-                                reviews: 100
-                              } as Product);
-                            }}
-                          >
-                            <Eye size={14} className="text-white" />
-                          </button>
-                        </div>
-                        <p className="text-sm font-bold">{item.name}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex flex-col md:items-end gap-2 border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-8 min-w-[150px]">
-                  <p className="text-lg font-black">{order.total}</p>
-                  <button className="text-[11px] font-black uppercase tracking-widest text-cocos-orange hover:underline">Track Order</button>
-                </div>
+            {orders.length === 0 ? (
+              <div className="bg-white border border-gray-200 p-12 text-center">
+                <Package size={48} className="mx-auto text-gray-300 mb-4" />
+                <p className="text-lg font-bold text-gray-600 mb-2">No orders yet</p>
+                <p className="text-sm text-gray-500">Start shopping to place your first order!</p>
               </div>
-            ))}
+            ) : (
+              orders.map(order => (
+                <div key={order.id} className="bg-white border border-gray-200 p-6 flex flex-col md:flex-row gap-6 md:items-center">
+                  <div className="flex-grow">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <p className="text-[11px] font-bold uppercase text-gray-400">Order ID: {order.id}</p>
+                        <p className="text-xs font-bold text-gray-500">Placed on {order.date}</p>
+                      </div>
+                      <span className={`px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full ${order.status === 'Delivered' ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+                        }`}>
+                        {order.status}
+                      </span>
+                    </div>
+                    <div className="flex gap-4">
+                      {order.items.map((item, i) => (
+                        <div key={i} className="flex items-center gap-4 group relative">
+                          <div className="relative w-12 h-16 overflow-hidden">
+                            <img src={item.imageUrl} className="w-full h-full object-cover border border-gray-100 group-hover:scale-105 transition-transform" alt={item.name} />
+                            <button
+                              className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onQuickView?.({
+                                  id: `order-${item.name}`,
+                                  name: item.name,
+                                  imageUrl: item.imageUrl,
+                                  price: order.total,
+                                  brand: 'Coco Fashion',
+                                  rating: 5,
+                                  reviews: 100
+                                } as Product);
+                              }}
+                            >
+                              <Eye size={14} className="text-white" />
+                            </button>
+                          </div>
+                          <p className="text-sm font-bold">{item.name}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex flex-col md:items-end gap-2 border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-8 min-w-[150px]">
+                    <p className="text-lg font-black">{order.total}</p>
+                    <button className="text-[11px] font-black uppercase tracking-widest text-cocos-orange hover:underline">Track Order</button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         );
       case 'overview':
@@ -219,7 +221,6 @@ const DashboardPage: React.FC<Props> = ({ user, onSignOut, onQuickView }) => {
             <div className="grid grid-cols-2 gap-4">
               {[
                 { label: 'Saved Items', icon: Clock, count: '12' },
-                { label: 'Store Credit', icon: CreditCard, count: 'UGX 0' },
                 { label: 'Address Book', icon: MapPin, count: '2' },
                 { label: 'Security', icon: ShieldCheck, count: 'Active' },
               ].map(link => (
