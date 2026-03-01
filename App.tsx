@@ -297,6 +297,10 @@ const App: React.FC = () => {
     setUser(userData);
     const redirectPath = userData.role === 'ADMIN' ? '/admin' : '/dashboard';
 
+    // Navigate immediately - don't wait for cart/wishlist merge
+    navigate(redirectPath);
+
+    // Merge cart and wishlist in background
     void (async () => {
       const token = tokenStore.getAccessToken();
       if (!token) {
@@ -307,14 +311,12 @@ const App: React.FC = () => {
       await cartApi.merge(token, guestId).catch(() => undefined);
 
       const wishlistIds = wishlist
-        .map((item) => findCatalogMatch(item)?.id ?? (/^[0-9a-f-]{36}$/i.test(item.id) ? item.id : undefined))
+        .map((item) => findCatalogMatch(item)?.id ?? (/^[0-9a-f-]{36}/i.test(item.id) ? item.id : undefined))
         .filter((id): id is string => Boolean(id));
 
       if (wishlistIds.length) {
         await wishlistApi.merge(token, wishlistIds).catch(() => undefined);
       }
-
-      navigate(redirectPath);
     })();
   };
 
