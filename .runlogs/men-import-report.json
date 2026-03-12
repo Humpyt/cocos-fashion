@@ -1,0 +1,521 @@
+{
+  "generatedAt": "2026-03-01T12:24:53.145Z",
+  "sourceDir": "/var/www/cocofashionbrands.com/current/public/Men",
+  "dryRun": false,
+  "summary": {
+    "filesDiscovered": 22,
+    "parsedFiles": 22,
+    "skippedFiles": 0,
+    "groups": 19,
+    "createdProducts": 19,
+    "updatedProducts": 0,
+    "createdVariants": 25,
+    "updatedVariants": 0
+  },
+  "skippedFiles": [],
+  "lowConfidence": [
+    {
+      "filename": "Charles tyrwhitt , blue 15.535in 230 - 370k.jpeg",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "parsed": {
+        "brand": "Charles Tyrwhitt",
+        "descriptor": "Shirt",
+        "color": "Blue 535in 230",
+        "sizes": [],
+        "priceMinor": 370000
+      }
+    },
+    {
+      "filename": "Charles tyrwhitt , blue 15.535in 230 -370k 2.jpeg",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "parsed": {
+        "brand": "Charles Tyrwhitt",
+        "descriptor": "Shirt",
+        "color": "Blue 535in 230",
+        "sizes": [],
+        "priceMinor": 370000
+      }
+    },
+    {
+      "filename": "Charles tyrwhitt,blue stripes. Size 16.533in - 230k 2.jpeg",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "parsed": {
+        "brand": "Charles Tyrwhitt",
+        "descriptor": "Shirt",
+        "color": "Blue Stripes 533in",
+        "sizes": [],
+        "priceMinor": 230000
+      }
+    },
+    {
+      "filename": "Charles tyrwhitt,blue stripes. Size 16.533in - 230k.jpeg",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "parsed": {
+        "brand": "Charles Tyrwhitt",
+        "descriptor": "Shirt",
+        "color": "Blue Stripes 533in",
+        "sizes": [],
+        "priceMinor": 230000
+      }
+    },
+    {
+      "filename": "Lacoste, navy size XL. 250k.jpeg",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "parsed": {
+        "brand": "Lacoste",
+        "descriptor": "Shirt",
+        "color": "Navy",
+        "sizes": [],
+        "priceMinor": 250000
+      }
+    },
+    {
+      "filename": "Levis, ash navy size M. 200k.jpeg",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "parsed": {
+        "brand": "Levis",
+        "descriptor": "Shirt",
+        "color": "Ash Navy",
+        "sizes": [],
+        "priceMinor": 200000
+      }
+    },
+    {
+      "filename": "Levis,red. Size S. 250k.jpeg",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "parsed": {
+        "brand": "Levis",
+        "descriptor": "Shirt",
+        "color": "Red",
+        "sizes": [],
+        "priceMinor": 250000
+      }
+    },
+    {
+      "filename": "Maurano, maroon size XL. 280K.jpeg",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "parsed": {
+        "brand": "Maurano",
+        "descriptor": "Shirt",
+        "color": "Maroon",
+        "sizes": [],
+        "priceMinor": 280000
+      }
+    },
+    {
+      "filename": "Polo  BROWN,size. M. 250K.jpeg",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename",
+        "Color was ambiguous; defaulted to Assorted"
+      ],
+      "parsed": {
+        "brand": "Polo BROWN",
+        "descriptor": "Polo",
+        "color": "Assorted",
+        "sizes": [],
+        "priceMinor": 250000
+      }
+    },
+    {
+      "filename": "Polo, blue stripped, size s. 400k.jpeg",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "parsed": {
+        "brand": "Polo",
+        "descriptor": "Polo",
+        "color": "Blue Stripped",
+        "sizes": [],
+        "priceMinor": 400000
+      }
+    },
+    {
+      "filename": "Polo, maroon checked. Size XL.  400K.png",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "parsed": {
+        "brand": "Polo",
+        "descriptor": "Polo",
+        "color": "Maroon",
+        "sizes": [],
+        "priceMinor": 400000
+      }
+    },
+    {
+      "filename": "Polo, multi checked. Size S. 400k.jpeg",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "parsed": {
+        "brand": "Polo",
+        "descriptor": "Polo",
+        "color": "Multi",
+        "sizes": [],
+        "priceMinor": 400000
+      }
+    },
+    {
+      "filename": "Polo,yellow size L. 250k.jpeg",
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "parsed": {
+        "brand": "Polo",
+        "descriptor": "Polo",
+        "color": "Yellow",
+        "sizes": [],
+        "priceMinor": 250000
+      }
+    }
+  ],
+  "groups": [
+    {
+      "slug": "shirts-charles-tyrwhitt-shirt-blue-535in-230-370000",
+      "brand": "Charles Tyrwhitt",
+      "descriptor": "Shirt",
+      "color": "Blue 535in 230",
+      "priceMinor": 370000,
+      "sizes": [
+        "ONE SIZE"
+      ],
+      "primaryImageUrl": "/Men/shirts/Charles%20tyrwhitt%20%2C%20blue%2015.535in%20230%20-%20370k.jpeg",
+      "imageCount": 2,
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "subcategory": "shirts"
+    },
+    {
+      "slug": "shirts-charles-tyrwhitt-shirt-blue-stripes-533in-230000",
+      "brand": "Charles Tyrwhitt",
+      "descriptor": "Shirt",
+      "color": "Blue Stripes 533in",
+      "priceMinor": 230000,
+      "sizes": [
+        "ONE SIZE"
+      ],
+      "primaryImageUrl": "/Men/shirts/Charles%20tyrwhitt%2Cblue%20stripes.%20Size%2016.533in%20-%20230k%202.jpeg",
+      "imageCount": 2,
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "subcategory": "shirts"
+    },
+    {
+      "slug": "shirts-charles-tyrwhitt-shirt-white-230000",
+      "brand": "Charles Tyrwhitt",
+      "descriptor": "Shirt",
+      "color": "White -",
+      "priceMinor": 230000,
+      "sizes": [
+        "15.5",
+        "16.0",
+        "16.5",
+        "17.0",
+        "17.5"
+      ],
+      "primaryImageUrl": "/Men/shirts/Charles%20tyrwhitt%2Cwhite%20sizes.%2015.534in%20%20To%2017.536in.%20%20230k-%20370k%202.jpeg",
+      "imageCount": 2,
+      "confidence": "high",
+      "warnings": [],
+      "subcategory": "shirts"
+    },
+    {
+      "slug": "shirts-club-room-shirt-yellow-linen-280000",
+      "brand": "Club Room",
+      "descriptor": "Shirt",
+      "color": "Yellow Linen",
+      "priceMinor": 280000,
+      "sizes": [
+        "M"
+      ],
+      "primaryImageUrl": "/Men/shirts/Club%20room%2C%20yellow%20linen.%20Sizes%20M%20%26XXL.%20%20280k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": [],
+      "subcategory": "shirts"
+    },
+    {
+      "slug": "shirts-maurano-shirt-maroon-280000",
+      "brand": "Maurano",
+      "descriptor": "Shirt",
+      "color": "Maroon",
+      "priceMinor": 280000,
+      "sizes": [
+        "ONE SIZE"
+      ],
+      "primaryImageUrl": "/Men/shirts/Maurano%2C%20maroon%20size%20XL.%20280K.jpeg",
+      "imageCount": 1,
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "subcategory": "shirts"
+    },
+    {
+      "slug": "shirts-polo-polo-blue-stripped-400000",
+      "brand": "Polo",
+      "descriptor": "Polo",
+      "color": "Blue Stripped",
+      "priceMinor": 400000,
+      "sizes": [
+        "ONE SIZE"
+      ],
+      "primaryImageUrl": "/Men/shirts/Polo%2C%20blue%20stripped%2C%20size%20s.%20400k.jpeg",
+      "imageCount": 1,
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "subcategory": "shirts"
+    },
+    {
+      "slug": "shirts-polo-polo-maroon-400000",
+      "brand": "Polo",
+      "descriptor": "Polo",
+      "color": "Maroon",
+      "priceMinor": 400000,
+      "sizes": [
+        "ONE SIZE"
+      ],
+      "primaryImageUrl": "/Men/shirts/Polo%2C%20maroon%20checked.%20Size%20XL.%20%20400K.png",
+      "imageCount": 1,
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "subcategory": "shirts"
+    },
+    {
+      "slug": "shirts-polo-polo-multi-400000",
+      "brand": "Polo",
+      "descriptor": "Polo",
+      "color": "Multi",
+      "priceMinor": 400000,
+      "sizes": [
+        "ONE SIZE"
+      ],
+      "primaryImageUrl": "/Men/shirts/Polo%2C%20multi%20checked.%20Size%20S.%20400k.jpeg",
+      "imageCount": 1,
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "subcategory": "shirts"
+    },
+    {
+      "slug": "t-shirts-lacoste-shirt-navy-250000",
+      "brand": "Lacoste",
+      "descriptor": "Shirt",
+      "color": "Navy",
+      "priceMinor": 250000,
+      "sizes": [
+        "ONE SIZE"
+      ],
+      "primaryImageUrl": "/Men/t-shirts/Lacoste%2C%20navy%20size%20XL.%20250k.jpeg",
+      "imageCount": 1,
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "subcategory": "t-shirts"
+    },
+    {
+      "slug": "t-shirts-levis-green-shirt-assorted-200000",
+      "brand": "Levis Green",
+      "descriptor": "Shirt",
+      "color": "Assorted",
+      "priceMinor": 200000,
+      "sizes": [
+        "L",
+        "M"
+      ],
+      "primaryImageUrl": "/Men/t-shirts/Levis%20green%2C%20size%20M%20and%20L%20200k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": [
+        "Color was ambiguous; defaulted to Assorted"
+      ],
+      "subcategory": "t-shirts"
+    },
+    {
+      "slug": "t-shirts-levis-shirt-ash-navy-200000",
+      "brand": "Levis",
+      "descriptor": "Shirt",
+      "color": "Ash Navy",
+      "priceMinor": 200000,
+      "sizes": [
+        "ONE SIZE"
+      ],
+      "primaryImageUrl": "/Men/t-shirts/Levis%2C%20ash%20navy%20size%20M.%20200k.jpeg",
+      "imageCount": 1,
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "subcategory": "t-shirts"
+    },
+    {
+      "slug": "t-shirts-levis-shirt-orange-200000",
+      "brand": "Levis",
+      "descriptor": "Shirt",
+      "color": "Orange",
+      "priceMinor": 200000,
+      "sizes": [
+        "S",
+        "XL"
+      ],
+      "primaryImageUrl": "/Men/t-shirts/Levis%2C%20orange%20sizes%20S%20and%20XL%20200K.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": [],
+      "subcategory": "t-shirts"
+    },
+    {
+      "slug": "t-shirts-levis-shirt-red-250000",
+      "brand": "Levis",
+      "descriptor": "Shirt",
+      "color": "Red",
+      "priceMinor": 250000,
+      "sizes": [
+        "ONE SIZE"
+      ],
+      "primaryImageUrl": "/Men/t-shirts/Levis%2Cred.%20Size%20S.%20250k.jpeg",
+      "imageCount": 1,
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "subcategory": "t-shirts"
+    },
+    {
+      "slug": "t-shirts-levis-white-shirt-assorted-200000",
+      "brand": "Levis White",
+      "descriptor": "Shirt",
+      "color": "Assorted",
+      "priceMinor": 200000,
+      "sizes": [
+        "S"
+      ],
+      "primaryImageUrl": "/Men/t-shirts/Levis%20white%2CSizes%20S%20and%20XL.%20200k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": [
+        "Color was ambiguous; defaulted to Assorted"
+      ],
+      "subcategory": "t-shirts"
+    },
+    {
+      "slug": "t-shirts-polo-brown-polo-assorted-250000",
+      "brand": "Polo BROWN",
+      "descriptor": "Polo",
+      "color": "Assorted",
+      "priceMinor": 250000,
+      "sizes": [
+        "ONE SIZE"
+      ],
+      "primaryImageUrl": "/Men/t-shirts/Polo%20%20BROWN%2Csize.%20M.%20250K.jpeg",
+      "imageCount": 1,
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename",
+        "Color was ambiguous; defaulted to Assorted"
+      ],
+      "subcategory": "t-shirts"
+    },
+    {
+      "slug": "t-shirts-polo-polo-black-380000",
+      "brand": "Polo",
+      "descriptor": "Polo",
+      "color": "Black",
+      "priceMinor": 380000,
+      "sizes": [
+        "XL"
+      ],
+      "primaryImageUrl": "/Men/t-shirts/Polo%20%2Cblack%20size%20XL%20380k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": [],
+      "subcategory": "t-shirts"
+    },
+    {
+      "slug": "t-shirts-polo-polo-yellow-250000",
+      "brand": "Polo",
+      "descriptor": "Polo",
+      "color": "Yellow",
+      "priceMinor": 250000,
+      "sizes": [
+        "ONE SIZE"
+      ],
+      "primaryImageUrl": "/Men/t-shirts/Polo%2Cyellow%20size%20L.%20250k.jpeg",
+      "imageCount": 1,
+      "confidence": "medium",
+      "warnings": [
+        "No size parsed from filename"
+      ],
+      "subcategory": "t-shirts"
+    },
+    {
+      "slug": "t-shirts-polo-polo-yellow-380000",
+      "brand": "Polo",
+      "descriptor": "Polo",
+      "color": "Yellow",
+      "priceMinor": 380000,
+      "sizes": [
+        "M"
+      ],
+      "primaryImageUrl": "/Men/t-shirts/Polo%2Cyellow%20sizes%20M%20and%20S.%20380k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": [],
+      "subcategory": "t-shirts"
+    },
+    {
+      "slug": "t-shirts-tommy-hilfiger-shirt-navy-200000",
+      "brand": "Tommy Hilfiger",
+      "descriptor": "Shirt",
+      "color": "Navy",
+      "priceMinor": 200000,
+      "sizes": [
+        "M"
+      ],
+      "primaryImageUrl": "/Men/t-shirts/Tommy%20hilfiger%2C%20navy%20size%20M%20200k.jpeg",
+      "imageCount": 1,
+      "confidence": "high",
+      "warnings": [],
+      "subcategory": "t-shirts"
+    }
+  ]
+}
